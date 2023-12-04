@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "1234",
-    "database": "tournamentdb",
+    "password": "danny",
+    "database": "clash",
     "host": "localhost",
     "dialect": "mysql"
   },

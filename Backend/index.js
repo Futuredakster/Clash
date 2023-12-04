@@ -8,8 +8,8 @@ app.use(express.json());
 const db = require("./models");
 
 
-const postRouter= require("./routes/Posts");
-app.use("/posts",postRouter );
+const postRouter= require("./routes/tournaments");
+app.use("/tournaments",postRouter );
 
 db.sequelize.sync().then(() => {
   app.listen(3001, () => {

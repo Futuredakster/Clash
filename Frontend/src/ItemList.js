@@ -12,9 +12,8 @@ const ItemList = ({ items }) => {
         <tbody>
                
             {items.map((item) => (
-                <tr>
-          
-             <td>{item.Name}</td>
+             <tr>
+             <td>{item.tournament_name}</td>
              <td>{item.Type}</td>
              <td>{item.Region}</td>
              </tr>

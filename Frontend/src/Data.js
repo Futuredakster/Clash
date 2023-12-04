@@ -12,7 +12,7 @@ function Data() {
 
   useEffect(() => {
     // Fetch data from the backend API
-    axios.get('http://localhost:3001/posts')
+    axios.get('http://localhost:3001/tournaments')
       .then(response => {
         setData(response.data);
         console.log(data);
@@ -30,7 +30,7 @@ function Data() {
       setSearch={setSearch}
       />
       <TableContent
-       items={data.filter(item=> ((item.Name).toLowerCase()).includes(search.toLowerCase()))}
+       items={data.filter(item=> ((item.tournament_name).toLowerCase()).includes(search.toLowerCase()))}
       />
     </div>
   );
