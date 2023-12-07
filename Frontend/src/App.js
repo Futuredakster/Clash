@@ -1,5 +1,6 @@
 import Home from './Pages/Home';
 import CreateAccount from './Pages/CreateAccount';
+import CreateUsers from './Pages/CreateUsers';
 import Navbar from './Navbar';
 import Topbar from './Topbar';
 import './App.css';
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path='/' exact element={<Home/>} />
         <Route path='/CreateAccount' exact element={<CreateAccount/>} />
+        <Route path='/CreateUsers' exact element ={<CreateUsers/>} />
       </Routes>
     </Router>
     </div>
