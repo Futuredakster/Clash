@@ -11,6 +11,14 @@ const db = require("./models");
 const postRouter= require("./routes/tournaments");
 app.use("/tournaments",postRouter );
 
+const usersRouter= require("./routes/users");
+app.use("/users",usersRouter );
+
+const accountsRouter= require("./routes/accounts");
+app.use("/accounts",accountsRouter );
+
+
+
 db.sequelize.sync().then(() => {
   app.listen(3001, () => {
     console.log("Server running on port 3001");

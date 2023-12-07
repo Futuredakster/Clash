@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Topbar from './Topbar';
-import TableContent from './TableContent';
+import Searchbar from '../Searchbar';
+import TableContent from '../TableContent';
 
 
-function Data() {
+function Home() {
   const [data, setData] = useState([]);
   const [search,setSearch] = useState('')
 
@@ -25,7 +24,7 @@ function Data() {
 
   return (
     <div className="Data">
-      <Topbar
+      <Searchbar
       search={search}
       setSearch={setSearch}
       />
@@ -36,5 +35,4 @@ function Data() {
   );
 }
 
-
-export default Data;
+export default Home;

@@ -10,8 +10,17 @@ module.exports = function(sequelize, DataTypes) {
     account_type: {
       type: DataTypes.STRING(50),
       allowNull: false
+    },
+    account_name: {
+      type: DataTypes.STRING(255),
+      allowNull: false
+    },
+    account_description: {
+      type: DataTypes.STRING(1000),
+      allowNull: true
     }
-  }, {
+  }, 
+  {
     sequelize,
     tableName: 'accounts',
     timestamps: false,
