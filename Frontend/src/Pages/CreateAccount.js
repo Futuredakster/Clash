@@ -2,8 +2,13 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import '../App.css';
+import { useNavigate } from 'react-router-dom';
 
 function CreatePost() {
+  
+  const navigate = useNavigate();
+
   const initialValues = {
     account_type: "",
     account_name: "",
@@ -16,18 +21,23 @@ function CreatePost() {
     account_description: Yup.string().min(3).max(1000).required("Description is required."),
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data, { setSubmitting }) => {
     console.log('Submitting data:', data);
-
+  
     axios.post("http://localhost:3001/accounts", data)
       .then((response) => {
         console.log("Request successful:", response.data);
+        // Navigate to '/CreateUsers' after successful submission
+        navigate('/CreateUsers');
       })
       .catch((error) => {
         console.error("Error:", error);
+      })
+      .finally(() => {
+        // Ensure to reset the form submission state
+        setSubmitting(false);
       });
   };
-
   return (
     <div className="createPostPage">
       <Formik
@@ -69,7 +79,10 @@ function CreatePost() {
             />
           </div>
 
-          <button type="submit">Create Post</button>
+          <button
+          type="submit"
+          >Create Post
+          </button>
         </Form>
       </Formik>
     </div>

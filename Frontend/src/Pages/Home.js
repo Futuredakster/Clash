@@ -11,15 +11,24 @@ function Home() {
 
   useEffect(() => {
     // Fetch data from the backend API
-    axios.get('http://localhost:3001/tournaments')
+    axios.get('http://localhost:3001/tournaments', {
+      headers: {
+        accessToken: localStorage.getItem("accessToken"),
+      },
+    })
       .then(response => {
+        if(response.data.error){
+          alert(response.data.error);
+        } else{
         setData(response.data);
-        console.log(data);
+        console.log(response.data); // Log the response data, not the state variable
+        }
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       });
   }, []);
+  
 
 
   return (
@@ -29,7 +38,7 @@ function Home() {
       setSearch={setSearch}
       />
       <TableContent
-       items={data.filter(item=> ((item.tournament_name).toLowerCase()).includes(search.toLowerCase()))}
+        items={Array.isArray(data) ? data.filter(item => ((item.tournament_name).toLowerCase()).includes(search.toLowerCase())) : []}
       />
     </div>
   );

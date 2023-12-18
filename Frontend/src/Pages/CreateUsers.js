@@ -5,8 +5,10 @@ import Password from "../FormComponents/Password";
 import Credantials from "../FormComponents/Credantials";
 import "../Form.css";
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 function CreateUsers(){
+  const navigate = useNavigate();
 
     const [pages, setPages] = useState(0);
     const [info, setInfo] = useState({
@@ -54,6 +56,7 @@ function CreateUsers(){
     if (pages === FormTitles.length - 1) {
       axios.post("http://localhost:3001/users", info)
         .then((response) => {
+          navigate('/');
           console.log("Request successful:", response);
         })
         .catch((error) => {

@@ -1,17 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const { tournaments } = require("../models");
+const { validateToken} = require("../middlewares/AuthMiddleware");
 
-router.get("/", async (req, res) => {
+router.get("/", validateToken, async (req, res) => {
   const listOfPosts = await tournaments.findAll();
   res.json(listOfPosts);
 });
 
 router.post("/", async (req, res) => {
   const post = req.body;
+  const username= req.user.username;
+  post.username= username;
+  // so req.username is really exual to the token that contains the username and then you make you input  the username the token provided as the username for the tournaments table
   await tournaments.create(post);
   res.json(post);
 });
+
+
 
 module.exports = router;
 

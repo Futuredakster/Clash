@@ -1,5 +1,14 @@
 import { Link } from 'react-router-dom';
+import React, { useState,useContext } from "react";
+import {AuthContext} from './helpers/AuthContext';
 function Topbar ()  {
+    const {authState, setAuthState} = useContext(AuthContext);
+
+    const logout = () => {
+        localStorage.removeItem("accessToken");
+        setAuthState({ username: "", id: 0, status: false });
+        window.location.reload()
+      };
     return(
         <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -40,16 +49,17 @@ function Topbar ()  {
                     </form>
                 </div>
             </li>
-
+            <h1>{authState.username}test</h1>
 
             {/* Nav Item - Alerts */}
             <li className="nav-item dropdown no-arrow mx-1">
-                <a className="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i className="fas fa-bell fa-fw"></i>
-                    {/* Counter - Alerts */}
-                    <span className="badge badge-danger badge-counter">3+</span>
-                </a>
+            {!authState.status ?(
+            <Link to="/Login" className="nav-link dropdown-toggle">Login</Link> 
+            ):(
+                <button onClick={logout}>Logout</button>
+                
+            )}
+                
                 {/* Dropdown - Alerts */}
                 <div className="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                     aria-labelledby="alertsDropdown">
