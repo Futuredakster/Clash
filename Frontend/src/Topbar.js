@@ -49,14 +49,14 @@ function Topbar ()  {
                     </form>
                 </div>
             </li>
-            <h1>{authState.username}test</h1>
+          
 
             {/* Nav Item - Alerts */}
             <li className="nav-item dropdown no-arrow mx-1">
             {!authState.status ?(
             <Link to="/Login" className="nav-link dropdown-toggle">Login</Link> 
             ):(
-                <button onClick={logout}>Logout</button>
+                <button className = "btn btn-primary" onClick={logout}>Logout</button>
                 
             )}
                 
@@ -177,7 +177,11 @@ function Topbar ()  {
             {/* Nav Item - User Information */}
             
             <li className="nav-item dropdown no-arrow">
+            {!authState.status ?(
                    <Link to="/CreateAccount" className="nav-link dropdown-toggle">Create New Account</Link>
+            ):(
+                <h1>{authState.username}</h1>
+            )}
                   
                 {/* Dropdown - User Information */}
                 <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in"

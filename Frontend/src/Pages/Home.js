@@ -10,18 +10,27 @@ function Home() {
 
 
   useEffect(() => {
+    // Check if accessToken exists in localStorage
+    const accessToken = localStorage.getItem("accessToken");
+  
+    if (!accessToken) {
+      // Handle the case where accessToken is not available
+      console.error('Access token not found. API request not made.');
+      return;
+    }
+  
     // Fetch data from the backend API
     axios.get('http://localhost:3001/tournaments', {
       headers: {
-        accessToken: localStorage.getItem("accessToken"),
+        accessToken: accessToken,
       },
     })
       .then(response => {
-        if(response.data.error){
+        if (response.data.error) {
           alert(response.data.error);
-        } else{
-        setData(response.data);
-        console.log(response.data); // Log the response data, not the state variable
+        } else {
+          setData(response.data);
+          console.log(response.data);
         }
       })
       .catch(error => {
