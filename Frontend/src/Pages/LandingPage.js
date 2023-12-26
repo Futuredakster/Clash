@@ -1,5 +1,6 @@
 import './Landing.css';
 import { Button } from 'react-bootstrap';
+import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
 
 function LandingPage (){
     return(
@@ -18,7 +19,11 @@ Say goodbye to the hassle of manual tournament management. Embrace the future of
 </h4>
                 </div>
                 <Button type="button" variant="primary" size="lg" active>Sign UP! </Button>
-                
+
+
+
+
+             
         </div>
     )
 }

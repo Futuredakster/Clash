@@ -3,8 +3,8 @@ import CreateAccount from './Pages/CreateAccount';
 import CreateUsers from './Pages/CreateUsers';
 import Login from './Pages/Login';
 import Navbar from './Navbar';
-import Topbar from './Topbar';
 import LandingPage from './Pages/LandingPage';
+import Tolpbar from './Tolpbar';
 import {AuthContext} from './helpers/AuthContext';
 import { useState, useEffect } from 'react';
 
@@ -42,16 +42,13 @@ useEffect(() => {
 
 
   return (
-   <body id="page-top">
+   <body>
     <AuthContext.Provider value={{authState, setAuthState}}>
-      <div id="wrapper">
       {authState.status ?(
         <Navbar />
         ) : null}
-        <div id="content-wrapper" className="d-flex flex-column">
-          <div id="content">
     <Router>
-    <Topbar/>
+    <Tolpbar/>
       <Routes>
       <Route path='/Login' exact element ={<Login/>} />
         <Route path='/Home' exact element={<Home/>} />
@@ -60,9 +57,6 @@ useEffect(() => {
         <Route path='/' exact element ={<LandingPage/>} />
       </Routes>
     </Router>
-    </div>
-    </div>
-    </div>
     </AuthContext.Provider>
     </body>
       );
