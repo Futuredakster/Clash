@@ -18,6 +18,14 @@ module.exports = function(sequelize, DataTypes) {
     password_hash: {
       type: DataTypes.STRING(255),
       allowNull: false
+    },
+    account_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'accounts',
+        key: 'account_id'
+      }
     }
   }, {
     sequelize,

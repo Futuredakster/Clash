@@ -5,8 +5,13 @@ const { accounts } = require("../models");
 
 router.post("/", async (req, res) => {
   const post = req.body;
-  await accounts.create(post);
-  res.json(post);
+  var a = await accounts.create(post);
+  res.json(a);
+});
+
+router.get("/", async (req, res) => {
+  const listOfPosts = await accounts.findAll();
+  res.json(listOfPosts);
 });
 
 module.exports = router;

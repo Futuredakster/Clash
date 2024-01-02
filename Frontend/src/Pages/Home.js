@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import Searchbar from '../Searchbar';
 import TableContent from '../TableContent';
+import {AuthContext} from '../helpers/AuthContext';
 
 
-function Home() {
+
+function Home({isValidAccount,setAccount}) {
   const [data, setData] = useState([]);
   const [search,setSearch] = useState('')
-
+  const {authState, setAuthState} = useContext(AuthContext);
 
   useEffect(() => {
     // Check if accessToken exists in localStorage
@@ -29,8 +31,10 @@ function Home() {
         if (response.data.error) {
           alert(response.data.error);
         } else {
+          console.log(authState.id);
+          console.log(isValidAccount);
           setData(response.data);
-          console.log(response.data);
+        
         }
       })
       .catch(error => {
@@ -41,7 +45,8 @@ function Home() {
 
 
   return (
-    <div className="Data">
+    
+    <div>
       <Searchbar
       search={search}
       setSearch={setSearch}
@@ -49,6 +54,11 @@ function Home() {
       <TableContent
         items={Array.isArray(data) ? data.filter(item => ((item.tournament_name).toLowerCase()).includes(search.toLowerCase())) : []}
       />
+       {authState.id===isValidAccount ?(
+        <TableContent
+        items={Array.isArray(data) ? data.filter(item => ((item.tournament_name).toLowerCase()).includes(search.toLowerCase())) : []}
+      />
+      ) : null}
     </div>
   );
 }

@@ -5,7 +5,7 @@ import axios from "axios";
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
 
-function CreatePost() {
+function CreatePost( {isValidAccount,setAccount}) {
   
   const navigate = useNavigate();
 
@@ -22,13 +22,28 @@ function CreatePost() {
   });
 
   const onSubmit = (data, { setSubmitting }) => {
-    console.log('Submitting data:', data);
-  
+  /*  axios.get('http://localhost:3001/accounts', {
+      
+    })
+      .then(response => {
+        if (response.data.error) {
+          alert(response.data.error);
+        } else {
+          setAccount(response.data);
+          console.log(response.data);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  */
     axios.post("http://localhost:3001/accounts", data)
       .then((response) => {
         console.log("Request successful:", response.data);
+        setAccount(response.data.account_id);
         // Navigate to '/CreateUsers' after successful submission
         navigate('/CreateUsers');
+       
       })
       .catch((error) => {
         console.error("Error:", error);

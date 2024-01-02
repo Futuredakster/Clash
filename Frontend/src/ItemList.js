@@ -3,10 +3,10 @@ const ItemList = ({ items }) => {
         <table>
         <thead>
         <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Start date</th>
             <th>End Date</th>
+            <th>Edit</th>
         </tr>
         </thead>
         <tbody>
@@ -14,8 +14,8 @@ const ItemList = ({ items }) => {
             {items.map((item) => (
              <tr>
              <td>{item.tournament_name}</td>
-             <td>{item.Type}</td>
-             <td>{item.Region}</td>
+             <td>{item.start_date}</td>
+             <td>{item.end_date}</td>
              </tr>
             ))}
             </tbody>

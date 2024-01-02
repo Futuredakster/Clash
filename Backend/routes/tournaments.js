@@ -8,10 +8,10 @@ router.get("/", validateToken, async (req, res) => {
   res.json(listOfPosts);
 });
 
-router.post("/", async (req, res) => {
+router.post("/",validateToken, async (req, res) => {
   const post = req.body;
-  const username= req.user.username;
-  post.username= username;
+ // const username= req.user.username;
+ // post.username= username;
   // so req.username is really exual to the token that contains the username and then you make you input  the username the token provided as the username for the tournaments table
   await tournaments.create(post);
   res.json(post);

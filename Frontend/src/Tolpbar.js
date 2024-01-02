@@ -8,12 +8,11 @@ const Tolpbar = () => {
     const logout = () => {
         localStorage.removeItem("accessToken");
         setAuthState({ username: "", id: 0, status: false });
-        window.location.reload()
       };
 
     return (
-        <nav className="navbar navbar-expand-lg bg-dark navbar-dark py-3 fixed-top">
-        <div className="container">
+        <nav className="navbar navbar-expand-lg bg-dark navbar-dark py-3">
+    
           <a href="#" className="navbar-brand">Clash</a>
  
           <button
@@ -31,7 +30,9 @@ const Tolpbar = () => {
                   {!authState.status ?(
             <Link to="/Login" className="nav-link dropdown-toggle">Login</Link> 
             ):(
-                <button className = "btn btn-primary" onClick={logout}>Logout</button>
+              <Link to="/" className="btn btn-primary" onClick={logout}>
+              Logout
+            </Link>
                 
             )}
               </li>
@@ -44,7 +45,7 @@ const Tolpbar = () => {
               </li>
             </ul>
           </div>
-        </div>
+        
         </nav>
     );
 }
