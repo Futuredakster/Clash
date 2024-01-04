@@ -6,14 +6,15 @@ const {validateToken} = require('../middlewares/AuthMiddleware')
 
 const {sign} = require('jsonwebtoken');
 
-router.post("/", async (req, res) => {
-  const { username, password_hash, email,account_id } = req.body;
+router.post("/",validateToken, async (req, res) => {
+  const { username, password_hash, email } = req.body;
   bcrypt.hash(password_hash, 10).then((hash) => {
+    const account_id = req.user.account_id;
     users.create({
       username: username,
       password_hash: hash,
       email: email,
-      account_id: account_id,
+      account_id:account_id,
     });
     res.json("SUCCESS");
   });
@@ -38,7 +39,7 @@ router.post("/Login", async (req, res) => {
     if (!match) {
       return res.json({ error: "Wrong Username And Password Combination" });
     }
-    const accessToken= sign({username : user.username, id:user.account_id}, "importantsecret");
+    const accessToken= sign({username : user.username, user_id:user.user_id, account_id:user.account_id }, "importantsecret");
     // if the username matches you search for the password and if that matches you are logged in now. This is collected from the login webpage.
     res.json({token: accessToken, username:username, id:user.account_id});
   });

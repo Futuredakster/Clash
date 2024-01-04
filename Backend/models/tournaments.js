@@ -34,7 +34,12 @@ module.exports = function(sequelize, DataTypes) {
     logo_url: {
       type: DataTypes.STRING(1000),
       allowNull: true
-    }
+    },
+    is_published: {
+      type: DataTypes.BOOLEAN, // or use TINYINT(1) if you prefer
+      allowNull: false, // or true if you want it to be nullable
+      defaultValue: false, // or true if you want to set a default value
+    },
   }, {
     sequelize,
     tableName: 'tournaments',

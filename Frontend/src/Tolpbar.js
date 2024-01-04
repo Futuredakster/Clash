@@ -38,7 +38,7 @@ const Tolpbar = () => {
               </li>
               <li className="nav-item">
               {!authState.status ?(
-                   <Link to="/CreateAccount" className="nav-link dropdown-toggle">Create New Account</Link>
+                   <Link to="/AccountUser" className="nav-link dropdown-toggle">Create New Account</Link>
             ):(
               <h1 className="nav-link dropdown-toggle"> {authState.username} </h1>
             )}

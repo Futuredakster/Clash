@@ -4,17 +4,26 @@ const { tournaments } = require("../models");
 const { validateToken} = require("../middlewares/AuthMiddleware");
 
 router.get("/", validateToken, async (req, res) => {
-  const listOfPosts = await tournaments.findAll();
+ const listOfPosts = await tournaments.findAll({where: {is_published: true}});
   res.json(listOfPosts);
 });
 
+router.get("/byaccount", validateToken, async (req, res) => {
+  const account_id= req.user.account_id;
+  const listOfPosts =  await tournaments.findAll({where: {account_id:account_id}});
+  res.json(listOfPosts);
+  // Doing the middleware authentication req.user is set equal to the accecsToken which contaons the account id so we just get it here
+});
+
+
+
 router.post("/",validateToken, async (req, res) => {
   const post = req.body;
- // const username= req.user.username;
- // post.username= username;
-  // so req.username is really exual to the token that contains the username and then you make you input  the username the token provided as the username for the tournaments table
-  await tournaments.create(post);
-  res.json(post);
+  const account_id= req.user.account_id;
+  post.account_id = account_id;
+  var t = await tournaments.create(post);
+// Samething here but we are setting the tournemnt id here instead of the frontend
+  res.json(t);
 });
 
 

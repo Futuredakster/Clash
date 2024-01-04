@@ -22,7 +22,7 @@ function LandingPage() {
         <Carousel.Caption  style={{ top: '50%', transform: 'translateY(-50%)' }}>
           <h3>Unleash the Thrill with Clash: Your Gateway to Effortless Tournament Management</h3>
           <p>Welcome to Clash, your ultimate platform for seamlessly organizing and managing tournaments tailored to your preferred sport! Whether you're an avid sports enthusiast, a passionate gamer, or a company looking to foster team spirit, Clash is here to revolutionize the way you experience competitions.</p>
-          <Button type="button" variant="primary" size="lg" active  onClick={() => navigate('/CreateAccount')}>Sign UP! </Button>
+          <Button type="button" variant="primary" size="lg" active  onClick={() => navigate('/AccountUser')}>Sign UP! </Button>
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item interval={500}>
@@ -36,7 +36,7 @@ function LandingPage() {
         <Carousel.Caption style={{ top: '50%', transform: 'translateY(-50%)' }}>
           <h3>Second slide label</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <Button type="button" variant="primary" size="lg" active  onClick={() => navigate('/CreateAccount')}>Sign UP! </Button>
+          <Button type="button" variant="primary" size="lg" active  onClick={() => navigate('/AccountUser')}>Sign UP! </Button>
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item>
@@ -50,7 +50,7 @@ function LandingPage() {
         <Carousel.Caption style={{ top: '50%', transform: 'translateY(-50%)' }} >
           <h3>Third slide label</h3>
           <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-          <Button type="button" variant="primary" size="lg" active  onClick={() => navigate('/CreateAccount')}>Sign UP! </Button>
+          <Button type="button" variant="primary" size="lg" active  onClick={() => navigate('/AccountUser')}>Sign UP! </Button>
         </Carousel.Caption>
       </Carousel.Item>
     </Carousel>
@@ -73,6 +73,6 @@ With Clash, you can take control of your tournament from start to finish. Design
 Say goodbye to the hassle of manual tournament management. Embrace the future of sports and competition with Clash – where creating and enjoying tournaments is as seamless as the victories that unfold within them. Join us in bringing your favorite sports and games to the next level!
 </h4>
 
-<Button type="button" variant="primary" size="lg" active  onClick={() => navigate('/CreateAccount')}>Sign UP! </Button>
+<Button type="button" variant="primary" size="lg" active  onClick={() => navigate('/AccountUsers')}>Sign UP! </Button>
 
 */}

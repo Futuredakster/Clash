@@ -20,7 +20,7 @@ const Leftbar = () => {
                       <Link to="/CreateUsers" className="ms-1 d-none d-sm-inline">Create Users</Link>
                         </li>
                         <li>
-                            <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
+                        <Link to="/MyTournaments" className="d-none d-sm-inline">My Tournaments</Link>
                         </li>
                     </ul>
                 </li>

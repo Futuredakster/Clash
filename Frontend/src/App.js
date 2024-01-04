@@ -1,11 +1,12 @@
 import Home from './Pages/Home';
-import CreateAccount from './Pages/CreateAccount';
 import CreateUsers from './Pages/CreateUsers';
 import Login from './Pages/Login';
 import Leftbar from './Leftbar';
 import LandingPage from './Pages/LandingPage';
 import Tolpbar from './Tolpbar';
 import CreateTournaments from './Pages/CreateTournaments';
+import MyTournaments from './Pages/MyTournaments';
+import AccountUser from './Pages/AccountUser';
 import {AuthContext} from './helpers/AuthContext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -16,7 +17,8 @@ import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
 
 function App() {
 const [authState, setAuthState] = useState({username:"", id:0, status:false});
-const [isValidAccount, setAccount] = useState(0);
+
+
 
 
 useEffect(() => {
@@ -60,11 +62,12 @@ useEffect(() => {
       <div className='col'>
         <Routes>
         <Route path='/Login' exact element ={<Login/>} />
-          <Route path='/CreateAccount' exact element={<CreateAccount isValidAccount={isValidAccount} setAccount={setAccount} />} />
-          <Route path='/CreateUsers' exact element ={<CreateUsers isValidAccount={isValidAccount} setAccount={setAccount}/>} />
-          <Route path='/Home' exact element={<Home  isValidAccount={isValidAccount} setAccount={setAccount}/>} />
+          <Route path='/CreateUsers' exact element ={<CreateUsers/>} />
           <Route path='/' exact element ={<LandingPage/>} />
-          <Route path='/CreateTournaments' exact element ={<CreateTournaments  isValidAccount={isValidAccount} setAccount={setAccount}/>} />
+          <Route path='/AccountUser' exact element ={<AccountUser/>} />
+          <Route path='/CreateTournaments' exact element ={<CreateTournaments/>} />
+          <Route path='/MyTournaments' exact element= {<MyTournaments />} />
+          <Route path='/Home' exact element={<Home />} />
         </Routes>
       </div>
 

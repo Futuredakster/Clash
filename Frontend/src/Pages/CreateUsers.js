@@ -4,18 +4,19 @@ import Identity from "../FormComponents/Identity";
 import Password from "../FormComponents/Password";
 import Credantials from "../FormComponents/Credantials";
 import "../Form.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
+import {AuthContext} from '../helpers/AuthContext';
 
-function CreateUsers({isValidAccount,setAccount}){
+function CreateUsers(){
+  const {authState, setAuthState} = useContext(AuthContext);
   const navigate = useNavigate();
-  console.log("accountid",isValidAccount);
     const [pages, setPages] = useState(0);
     const [info, setInfo] = useState({
         email: "",
         password_hash: "",
         username: "",
-        account_id: isValidAccount
+        account_id: authState.id
       });
 
     const FormTitles = ["Identity", "Credntials", "Password"];
@@ -55,20 +56,23 @@ function CreateUsers({isValidAccount,setAccount}){
             <button
   onClick={() => {
     if (pages === FormTitles.length - 1) {
-
-    
-      axios.post("http://localhost:3001/users", info)
-        .then((response) => {
-          navigate('/Login');
-          console.log("Request successful:", response);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    } else {
-      setPages((currPage) => currPage + 1);
-    }
-  }}
+      const accessToken = localStorage.getItem("accessToken");
+      axios.post("http://localhost:3001/users", info, {
+        headers: {
+            accessToken:accessToken,
+        }
+    })
+    .then((response) => {
+        navigate('/Home');
+        console.log("Request successful:", response);
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    });
+} else {
+    setPages((currPage) => currPage + 1);
+}
+}}
 >
   {pages === FormTitles.length - 1 ? "Submit" : "Next"}
 </button>

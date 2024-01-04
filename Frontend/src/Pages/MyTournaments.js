@@ -6,7 +6,7 @@ import {AuthContext} from '../helpers/AuthContext';
 
 
 
-function Home() {
+function MyTournaments() {
   const [data, setData] = useState([]);
   const [search,setSearch] = useState('')
   const {authState, setAuthState} = useContext(AuthContext);
@@ -22,7 +22,7 @@ function Home() {
     }
   
     // Fetch data from the backend API
-    axios.get('http://localhost:3001/tournaments', {
+    axios.get('http://localhost:3001/tournaments/byaccount', {
       headers: {
         accessToken: accessToken,
       },
@@ -40,7 +40,6 @@ function Home() {
         console.error('Error fetching data:', error);
       });
   }, []);
-  
 
 
   return (
@@ -56,5 +55,4 @@ function Home() {
     </div>
   );
 }
-
-export default Home;
+export default MyTournaments;

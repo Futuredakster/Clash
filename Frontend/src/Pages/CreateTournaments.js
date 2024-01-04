@@ -3,29 +3,29 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import axios from "axios";
 import '../App.css';
+import {useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
+import {AuthContext} from '../helpers/AuthContext';
+import { Button } from "react-bootstrap";
 
-const CreateTournaments = ( {isValidAccount,setAccount}) => {
+const CreateTournaments = ( ) => {
     const navigate = useNavigate();
- 
+    const {authState, setAuthState} = useContext(AuthContext);
+
   const initialValues = {
     tournament_name: "",
     start_date: "",
     end_date: "",
+    is_published: false,
   };
 
-  const AccountIdComponent = ({ isValidAccount }) => {
-    return (
-      <ul>
-        <li> {isValidAccount}</li>
-      </ul>
-    );
-  };
+ 
 
   const validationSchema = Yup.object().shape({
     tournament_name: Yup.string().required("You must create a Tournament Name!!"),
     start_date: Yup.date().nullable().required('Start Date is required'),
-    end_date: Yup.date().nullable().required('End Date is required')
+    end_date: Yup.date().nullable().required('End Date is required'),
+    is_published: Yup.boolean().required('Publication status is required'),
   });
 
   const onSubmit = (data, { setSubmitting }) => {
@@ -57,6 +57,12 @@ const CreateTournaments = ( {isValidAccount,setAccount}) => {
             setSubmitting(false);
         });
   };
+
+  const handlePublishButtonClick = (formik) => {
+    // Set is_published to true when the "Publish" button is clicked
+    formik.setFieldValue('is_published', true);
+  };
+
   return (
     <div className="createPostPage">
       <Formik
@@ -64,6 +70,7 @@ const CreateTournaments = ( {isValidAccount,setAccount}) => {
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
+        {(formik) => ( 
         <Form className="formContainer">
           <div className="formField">
             <label htmlFor="tournament_name">Tournament Name:</label>
@@ -97,15 +104,15 @@ const CreateTournaments = ( {isValidAccount,setAccount}) => {
               placeholder="(Ex. MM,DD,YY)"
             />
           </div>
-
-          <button
-          type="submit"
-          >Create Tournament
-          </button>
-        </Form>
+          <div className="formField">
+          <button  onClick={() => { handlePublishButtonClick(formik)}}>
+                Publish and Submit
+              </button>
+            </div>
+            <button type="submit">Create Tournament</button>
+          </Form>
+        )}
       </Formik>
-      <h2>List of Account IDs:</h2>
-      <AccountIdComponent isValidAccount={isValidAccount} />
     </div>
   );
 }
