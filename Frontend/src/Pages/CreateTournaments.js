@@ -3,14 +3,13 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import axios from "axios";
 import '../App.css';
-import {useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
-import {AuthContext} from '../helpers/AuthContext';
-import { Button } from "react-bootstrap";
+import { Container, Card, Button } from 'react-bootstrap';
+import { Helmet } from 'react-helmet';
 
 const CreateTournaments = ( ) => {
     const navigate = useNavigate();
-    const {authState, setAuthState} = useContext(AuthContext);
+
 
   const initialValues = {
     tournament_name: "",
@@ -64,56 +63,67 @@ const CreateTournaments = ( ) => {
   };
 
   return (
-    <div className="createPostPage">
-      <Formik
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        validationSchema={validationSchema}
-      >
-        {(formik) => ( 
-        <Form className="formContainer">
-          <div className="formField">
-            <label htmlFor="tournament_name">Tournament Name:</label>
-            <ErrorMessage name="tournament_name" component="span" />
-            <Field
-              type="text"
-              id="tournament_name"
-              name="tournament_name"
-              placeholder="(Ex. USA OPEN...)"
-            />
-          </div>
+    <Container className="mt-3">
+       <Helmet>
+        <title>Create Tournament</title>
+        <meta name="description" content="Description of your page" />
+        {/* Add more meta tags, link tags, etc. as needed */}
+      </Helmet>
+      <Card bg="secondary" text="white">
+        <Card.Body>
+          <h4 className="card-title">Create Tournament</h4>
+          <p className="card-text">Please complete the form. It's simple</p>
+          <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+            {(formik) => (
+              <Form>
+                <div className="mb-3">
+                  <label htmlFor="tournament_name" className="form-label">
+                    Tournament Name:
+                  </label>
+                  <ErrorMessage name="tournament_name" component="div" className="text-danger" />
+                  <Field
+                    type="text"
+                    id="tournament_name"
+                    name="tournament_name"
+                    placeholder="(Ex. USA OPEN...)"
+                    className="form-control"
+                  />
+                </div>
 
-          <div className="formField">
-            <label htmlFor="start_date">Start Date:</label>
-            <ErrorMessage name="start_date" component="span" />
-            <Field
-              type="text"
-              id="start_date"
-              name="start_date"
-              placeholder="(Ex. MM,DD,YY)"
-            />
-          </div>
+                <div className="mb-3">
+                  <label htmlFor="start_date" className="form-label">
+                    Start Date:
+                  </label>
+                  <ErrorMessage name="start_date" component="div" className="text-danger" />
+                  <Field type="date" id="start_date" name="start_date" placeholder="(Ex. MM,DD,YY)" className="form-control" />
+                </div>
 
-          <div className="formField">
-            <label htmlFor="end_date">End Date:</label>
-            <ErrorMessage name="end_date" component="span" />
-            <Field
-              type="text"
-              id="end_date"
-              name="end_date"
-              placeholder="(Ex. MM,DD,YY)"
-            />
-          </div>
-          <div className="formField">
-          <button  onClick={() => { handlePublishButtonClick(formik)}}>
-                Publish and Submit
-              </button>
-            </div>
-            <button type="submit">Create Tournament</button>
-          </Form>
-        )}
-      </Formik>
-    </div>
+                <div className="mb-3">
+                  <label htmlFor="end_date" className="form-label">
+                    End Date:
+                  </label>
+                  <ErrorMessage name="end_date" component="div" className="text-danger" />
+                  <Field type="date" id="end_date" name="end_date" placeholder="(Ex. MM,DD,YY)" className="form-control" />
+                </div>
+
+             {/*   <button
+                role="button"
+                  onClick={() => handlePublishButtonClick(formik)}
+                  variant="primary"
+                  className="mb-3"
+                >
+                  Publish and Submit
+                </button>
+            */}
+                <Button type="submit" variant="primary">
+                  Create Tournament
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 }
 export default CreateTournaments;
