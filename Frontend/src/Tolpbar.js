@@ -13,7 +13,7 @@ const Tolpbar = () => {
     return (
         <nav className="navbar navbar-expand-lg bg-dark navbar-dark py-3">
     
-          <a href="#" className="navbar-brand">Clash</a>
+          <a href="#" className="navbar-brand container">Clash</a>
  
           <button
             className="navbar-toggler"
@@ -30,7 +30,7 @@ const Tolpbar = () => {
                   {!authState.status ?(
             <Link to="/Login" className="nav-link dropdown-toggle">Login</Link> 
             ):(
-              <Link to="/" className="btn btn-primary" onClick={logout}>
+              <Link to="/LandingPage" className="btn btn-primary" onClick={logout}>
               Logout
             </Link>
                 

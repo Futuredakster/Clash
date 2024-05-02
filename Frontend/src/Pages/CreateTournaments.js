@@ -63,7 +63,7 @@ const CreateTournaments = ( ) => {
   };
 
   return (
-    <Container className="mt-3">
+    <Container style={{ marginTop: '20vh' }}>
        <Helmet>
         <title>Create Tournament</title>
         <meta name="description" content="Description of your page" />
@@ -106,7 +106,7 @@ const CreateTournaments = ( ) => {
                   <Field type="date" id="end_date" name="end_date" placeholder="(Ex. MM,DD,YY)" className="form-control" />
                 </div>
 
-             {/*   <button
+             {   <button
                 role="button"
                   onClick={() => handlePublishButtonClick(formik)}
                   variant="primary"
@@ -114,7 +114,7 @@ const CreateTournaments = ( ) => {
                 >
                   Publish and Submit
                 </button>
-            */}
+            }
                 <Button type="submit" variant="primary">
                   Create Tournament
                 </Button>

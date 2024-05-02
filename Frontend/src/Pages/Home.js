@@ -26,6 +26,9 @@ function Home() {
       headers: {
         accessToken: accessToken,
       },
+      params: {
+        tournament_name: search,
+      },
     })
       .then(response => {
         if (response.data.error) {
@@ -39,7 +42,7 @@ function Home() {
       .catch(error => {
         console.error('Error fetching data:', error);
       });
-  }, []);
+  }, [search]);
   
 
 
@@ -51,7 +54,7 @@ function Home() {
       setSearch={setSearch}
       />
       <TableContent
-        items={Array.isArray(data) ? data.filter(item => ((item.tournament_name).toLowerCase()).includes(search.toLowerCase())) : []}
+        items={data}
       />
     </div>
   );

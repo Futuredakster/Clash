@@ -25,6 +25,9 @@ function MyTournaments() {
     axios.get('http://localhost:3001/tournaments/byaccount', {
       headers: {
         accessToken: accessToken,
+      }, 
+      params: {
+        tournament_name: search,
       },
     })
       .then(response => {
@@ -39,7 +42,7 @@ function MyTournaments() {
       .catch(error => {
         console.error('Error fetching data:', error);
       });
-  }, []);
+  }, [search]);
 
 
   return (
@@ -50,7 +53,7 @@ function MyTournaments() {
       setSearch={setSearch}
       />
       <TableContent
-        items={Array.isArray(data) ? data.filter(item => ((item.tournament_name).toLowerCase()).includes(search.toLowerCase())) : []}
+        items={data}
       />
     </div>
   );

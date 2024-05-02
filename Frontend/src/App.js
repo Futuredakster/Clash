@@ -7,13 +7,14 @@ import Tolpbar from './Tolpbar';
 import CreateTournaments from './Pages/CreateTournaments';
 import MyTournaments from './Pages/MyTournaments';
 import AccountUser from './Pages/AccountUser';
+import CompetitorView from './Pages/CompetitorView';
 import {AuthContext} from './helpers/AuthContext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
+import {BrowserRouter as Router,Route,Routes,Navigate} from 'react-router-dom';
 
-
+const accessToken = localStorage.getItem("accessToken");
 
 function App() {
 const [authState, setAuthState] = useState({username:"", id:0, status:false});
@@ -63,8 +64,10 @@ useEffect(() => {
         <Routes>
         <Route path='/Login' exact element ={<Login/>} />
           <Route path='/CreateUsers' exact element ={<CreateUsers/>} />
-          <Route path='/' exact element ={<LandingPage/>} />
+          <Route path='/' element={!accessToken ? <Navigate to="/LandingPage" /> : <Navigate to="/Home" />} />
           <Route path='/AccountUser' exact element ={<AccountUser/>} />
+          <Route path='/CompetitorView' exact element = {<CompetitorView/>} />
+          <Route path='/LandingPage' exact element ={<LandingPage/>} />
           <Route path='/CreateTournaments' exact element ={<CreateTournaments/>} />
           <Route path='/MyTournaments' exact element= {<MyTournaments />} />
           <Route path='/Home' exact element={<Home />} />

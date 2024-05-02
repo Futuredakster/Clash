@@ -6,7 +6,6 @@ const ItemList = ({ items }) => {
             <th>Name</th>
             <th>Start date</th>
             <th>End Date</th>
-            <th>Edit</th>
         </tr>
         </thead>
         <tbody>

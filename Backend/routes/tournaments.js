@@ -2,17 +2,48 @@ const express = require("express");
 const router = express.Router();
 const { tournaments } = require("../models");
 const { validateToken} = require("../middlewares/AuthMiddleware");
+const { Op } = require('sequelize');
 
 router.get("/", validateToken, async (req, res) => {
- const listOfPosts = await tournaments.findAll({where: {is_published: true}});
-  res.json(listOfPosts);
+  const { tournament_name } = req.query; 
+  try {
+    let whereCondition = { is_published: true };
+    if (tournament_name && tournament_name.trim() !== '') {
+      whereCondition.tournament_name = {
+        [Op.like]: `%${tournament_name}%` 
+      };
+    }
+    const listOfPosts = await tournaments.findAll({
+      where: whereCondition,
+      order: [['start_date', 'ASC']]
+    });
+    res.json(listOfPosts);
+  } catch (error) {
+    console.error("Error fetching tournaments:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.get("/byaccount", validateToken, async (req, res) => {
-  const account_id= req.user.account_id;
-  const listOfPosts =  await tournaments.findAll({where: {account_id:account_id}});
-  res.json(listOfPosts);
-  // Doing the middleware authentication req.user is set equal to the accecsToken which contaons the account id so we just get it here
+  const { tournament_name } = req.query;
+  const account_id = req.user.account_id;
+  try {
+    let whereCondition = { account_id };
+    if (tournament_name && tournament_name.trim() !== '') {
+      whereCondition.tournament_name = {
+        [Op.like]: `%${tournament_name}%` 
+      };
+    }
+    const listOfPosts = await tournaments.findAll({
+      where: whereCondition,
+      order: [['start_date', 'ASC']]
+    });
+
+    res.json(listOfPosts);
+  } catch (error) {
+    console.error("Error fetching tournaments:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 
