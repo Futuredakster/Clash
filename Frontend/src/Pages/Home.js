@@ -10,11 +10,11 @@ function Home() {
   const [data, setData] = useState([]);
   const [search,setSearch] = useState('')
   const {authState, setAuthState} = useContext(AuthContext);
-
+  console.log("test",authState.acoount_id);
+ 
   useEffect(() => {
     // Check if accessToken exists in localStorage
     const accessToken = localStorage.getItem("accessToken");
-  
     if (!accessToken) {
       // Handle the case where accessToken is not available
       console.error('Access token not found. API request not made.');
@@ -43,11 +43,12 @@ function Home() {
         console.error('Error fetching data:', error);
       });
   }, [search]);
+
   
 
 
   return (
-    
+
     <div>
       <Searchbar
       search={search}
@@ -55,6 +56,7 @@ function Home() {
       />
       <TableContent
         items={data}
+        accountId={authState.account_id}
       />
     </div>
   );

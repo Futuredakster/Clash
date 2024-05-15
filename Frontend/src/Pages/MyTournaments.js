@@ -54,6 +54,7 @@ function MyTournaments() {
       />
       <TableContent
         items={data}
+        accountId={authState.account_id}
       />
     </div>
   );

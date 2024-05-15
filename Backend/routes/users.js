@@ -41,7 +41,7 @@ router.post("/Login", async (req, res) => {
     }
     const accessToken= sign({username : user.username, user_id:user.user_id, account_id:user.account_id }, "importantsecret");
     // if the username matches you search for the password and if that matches you are logged in now. This is collected from the login webpage.
-    res.json({token: accessToken, username:username, id:user.account_id});
+    res.json({token: accessToken, username:username, id:user.user_id, account_id:user.account_id});
   });
 });
 

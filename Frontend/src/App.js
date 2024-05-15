@@ -17,14 +17,13 @@ import {BrowserRouter as Router,Route,Routes,Navigate} from 'react-router-dom';
 const accessToken = localStorage.getItem("accessToken");
 
 function App() {
-const [authState, setAuthState] = useState({username:"", id:0, status:false});
+const [authState, setAuthState] = useState({username:"", id:0, status:false,accoint_id:0});
 
 
 
 
 useEffect(() => {
   console.log("firing api");
-  const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) {
     // Handle the case where there is no access token (e.g., redirect to login page)
     setAuthState({...authState, status:false});
@@ -40,7 +39,8 @@ useEffect(() => {
         setAuthState({...authState, status:false});
       } else {
         console.log(response.data.username);
-        setAuthState({username:response.data.username, id:response.data.id, status:true});
+        console.log(response.data.account_id)
+        setAuthState({username:response.data.username, id:response.data.id, status:true,account_id:response.data.account_id});
       }
     });
   }
@@ -70,7 +70,7 @@ useEffect(() => {
           <Route path='/LandingPage' exact element ={<LandingPage/>} />
           <Route path='/CreateTournaments' exact element ={<CreateTournaments/>} />
           <Route path='/MyTournaments' exact element= {<MyTournaments />} />
-          <Route path='/Home' exact element={<Home />} />
+          <Route path='/Home' exact element={<Home  />} />
         </Routes>
       </div>
 

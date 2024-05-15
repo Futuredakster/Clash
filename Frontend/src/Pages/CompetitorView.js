@@ -1,7 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Dropdown from 'react-bootstrap/Dropdown';
+import { useState } from 'react';
+
 
 const CompetitorView = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
+
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
     const navigate = useNavigate();
     const navig = () => {
         navigate('/Home')

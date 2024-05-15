@@ -20,6 +20,7 @@ function Login() {
         username: response.data.username,
         id: response.data.id,
         status: true,
+        account_id: response.data.account_id
       });
       navigate('/Home');
       }
