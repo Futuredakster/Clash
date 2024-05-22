@@ -1,0 +1,82 @@
+const Sequelize = require('sequelize');
+module.exports = function(sequelize, DataTypes) {
+  const Divisions = sequelize.define('Divisions', {
+    division_id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
+    tournament_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'tournaments', // Ensure this matches the name of your Tournaments model
+        key: 'tournament_id'
+      },
+      onDelete: 'CASCADE'
+    },
+    age_group: {
+      type: DataTypes.STRING(50),
+      allowNull: false
+    },
+    proficiency_level: {
+      type: DataTypes.STRING(20),
+      allowNull: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    modified_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      onUpdate: Sequelize.literal('CURRENT_TIMESTAMP')
+    }
+  }, {
+    sequelize,
+    tableName: 'Divisions',
+    timestamps: false,
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "division_id" },
+        ]
+      },
+      {
+        name: "unique_division",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "tournament_id" },
+          { name: "age_group" },
+          { name: "proficiency_level" }
+        ]
+      },
+      {
+        name: "tournament_id",
+        using: "BTREE",
+        fields: [
+          { name: "tournament_id" },
+        ]
+      }
+    ]
+  });
+
+  // Hooks for updating timestamps
+  Divisions.beforeCreate((division, options) => {
+    division.created_at = new Date();
+    division.modified_at = new Date();
+  });
+
+  Divisions.beforeUpdate((division, options) => {
+    division.modified_at = new Date();
+  });
+
+  return Divisions;
+};

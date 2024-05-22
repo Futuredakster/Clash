@@ -8,6 +8,8 @@ import CreateTournaments from './Pages/CreateTournaments';
 import MyTournaments from './Pages/MyTournaments';
 import AccountUser from './Pages/AccountUser';
 import CompetitorView from './Pages/CompetitorView';
+import CreateDivision from './Pages/CreateDivision';
+import SeeDivisions from './Pages/SeeDivisions';
 import {AuthContext} from './helpers/AuthContext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -71,6 +73,8 @@ useEffect(() => {
           <Route path='/CreateTournaments' exact element ={<CreateTournaments/>} />
           <Route path='/MyTournaments' exact element= {<MyTournaments />} />
           <Route path='/Home' exact element={<Home  />} />
+          <Route path='/CreateDivision' exact element={<CreateDivision/>} />
+          <Route path='/seeDivisions' exact element={<SeeDivisions/>} />
         </Routes>
       </div>
 

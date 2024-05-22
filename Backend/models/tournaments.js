@@ -40,6 +40,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false, // or true if you want it to be nullable
       defaultValue: false, // or true if you want to set a default value
     },
+    image_filename: {
+      type: DataTypes.STRING(255), // Adjust the size based on your needs
+      allowNull: true // Allow the field to be nullable if an image is optional
+    }
   }, {
     sequelize,
     tableName: 'tournaments',

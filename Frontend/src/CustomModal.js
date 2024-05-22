@@ -11,6 +11,7 @@ const CustomModal = ({ showModal, handleClose, accountId, tournament_id }) => {
     account_id: accountId,
     tournament_id: tournament_id
   });
+  const [imageFile, setImageFile] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,14 +21,29 @@ const CustomModal = ({ showModal, handleClose, accountId, tournament_id }) => {
     });
   };
 
+  const handleFileChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const accessToken = localStorage.getItem("accessToken");
+    const data = new FormData();
+
+    data.append('tournament_name', formData.tournament_name);
+    data.append('start_date', formData.start_date);
+    data.append('end_date', formData.end_date);
+    data.append('account_id', formData.account_id);
+    data.append('tournament_id', formData.tournament_id);
+    if (imageFile) {
+      data.append('image', imageFile);
+    }
+
     try {
-      console.log("about to send p")
-      await axios.patch(`http://localhost:3001/tournaments`, formData, {
+      await axios.patch(`http://localhost:3001/tournaments`, data, {
         headers: {
           accessToken: accessToken,
+          'Content-Type': 'multipart/form-data'
         }
       });
       console.log('Tournament data updated successfully');
@@ -42,10 +58,10 @@ const CustomModal = ({ showModal, handleClose, accountId, tournament_id }) => {
   return (
     <Modal show={showModal} onHide={handleClose} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Custom Modal Title</Modal.Title>
+        <Modal.Title>Edit Tournament</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div>
             <label htmlFor="tournament_name">Name:</label>
             <input
@@ -54,7 +70,6 @@ const CustomModal = ({ showModal, handleClose, accountId, tournament_id }) => {
               name="tournament_name"
               value={formData.tournament_name}
               onChange={handleInputChange}
-              
             />
           </div>
           <div>
@@ -65,7 +80,6 @@ const CustomModal = ({ showModal, handleClose, accountId, tournament_id }) => {
               name="start_date"
               value={formData.start_date}
               onChange={handleInputChange}
-              
             />
           </div>
           <div>
@@ -76,7 +90,15 @@ const CustomModal = ({ showModal, handleClose, accountId, tournament_id }) => {
               name="end_date"
               value={formData.end_date}
               onChange={handleInputChange}
-              
+            />
+          </div>
+          <div>
+            <label htmlFor="image">Image:</label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              onChange={handleFileChange}
             />
           </div>
           <button type="submit">Save Changes</button>

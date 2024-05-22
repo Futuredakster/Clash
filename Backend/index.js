@@ -1,10 +1,13 @@
 const express = require("express");
 const app = express();
 const cors = require('cors');
+const path = require('path');
 
 
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 const db = require("./models");
 
 
@@ -16,6 +19,9 @@ app.use("/users",usersRouter );
 
 const accountsRouter= require("./routes/accounts");
 app.use("/accounts",accountsRouter );
+
+const divisionRouter = require("./routes/divisions");
+app.use("/divisions",divisionRouter);
 
 
 
