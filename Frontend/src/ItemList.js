@@ -46,6 +46,8 @@ const seeDivision = (tournamentName, tournamentId) =>{
       });
   };
 
+  
+  
   return (
     <table>
       <thead>

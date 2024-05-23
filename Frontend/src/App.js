@@ -7,7 +7,7 @@ import Tolpbar from './Tolpbar';
 import CreateTournaments from './Pages/CreateTournaments';
 import MyTournaments from './Pages/MyTournaments';
 import AccountUser from './Pages/AccountUser';
-import CompetitorView from './Pages/CompetitorView';
+import CompetitorView from './PraticipentView/CompetitorView';
 import CreateDivision from './Pages/CreateDivision';
 import SeeDivisions from './Pages/SeeDivisions';
 import {AuthContext} from './helpers/AuthContext';

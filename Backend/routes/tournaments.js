@@ -34,6 +34,34 @@ router.get("/", validateToken, async (req, res) => {
   }
 });
 
+router.get("/praticipent", async (req, res) => {
+  const { tournament_name } = req.query;
+  try {
+    let whereCondition = { is_published: true };
+    if (tournament_name && tournament_name.trim() !== '') {
+      whereCondition.tournament_name = {
+        [Op.like]: `%${tournament_name}%`
+      };
+    }
+
+    const listOfPosts = await tournaments.findAll({
+      where: whereCondition,
+      order: [['start_date', 'ASC']]
+    });
+
+    // Construct the image URL for each tournament
+    const tournamentsWithImageUrl = listOfPosts.map(tournament => ({
+      ...tournament.dataValues,
+      imageUrl: tournament.image_filename ? `${req.protocol}://${req.get('host')}/uploads/${tournament.image_filename}` : null
+    }));
+
+    res.json(tournamentsWithImageUrl);
+  } catch (error) {
+    console.error("Error fetching tournaments:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 router.get("/byaccount", validateToken, async (req, res) => {
   const { tournament_name } = req.query;
