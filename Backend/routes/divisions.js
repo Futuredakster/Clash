@@ -23,6 +23,14 @@ router.post('/', validateToken, async (req, res) => {
       res.json(divisions);
   });
 
+  router.get('/praticepent',async (req,res) =>{
+    const { tournament_id } = req.query;
+    const divisions = await Divisions.findAll({
+        where: {tournament_id:tournament_id},
+      });
+      res.json(divisions);
+  });
+
 
   router.patch("/", validateToken, async (req, res) => {
     try {

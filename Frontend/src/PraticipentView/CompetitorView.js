@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Searchbar from '../Searchbar';
+import { useNavigate } from 'react-router-dom';
 
 const CompetitorView = () => {
     const [data, setData] = useState([]);
     const [search, setSearch] = useState('');
+    const navigate = useNavigate();
+
+    const handleViewDetails = (tournamentId, tournamentName) => {
+        const queryString = new URLSearchParams({ tournament_id: tournamentId, tournament_name:tournamentName }).toString();
+        navigate(`/Divisions?${queryString}`);
+    };
+
 
     useEffect(() => {
         axios.get('http://localhost:3001/tournaments/praticipent', {
@@ -41,7 +49,12 @@ const CompetitorView = () => {
                                 <h5 className="card-title">{item.tournament_name}</h5>
                                 <p className="card-text">Start Date: {item.start_date}</p>
                                 <p className="card-text">End Date: {item.end_date}</p>
-                                <button className="btn btn-primary">View Details</button>
+                                <button 
+                                    className="btn btn-primary"
+                                    onClick={() => handleViewDetails(item.tournament_id,item.tournament_name)}
+                                >
+                                    View Details
+                                </button>
                             </div>
                         </div>
                     </div>

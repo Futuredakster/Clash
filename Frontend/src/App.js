@@ -10,6 +10,8 @@ import AccountUser from './Pages/AccountUser';
 import CompetitorView from './PraticipentView/CompetitorView';
 import CreateDivision from './Pages/CreateDivision';
 import SeeDivisions from './Pages/SeeDivisions';
+import { ParticipentForm } from './PraticipentView/ParticipentForm';
+import { Divisions } from './PraticipentView/Divisions';
 import {AuthContext} from './helpers/AuthContext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -75,6 +77,8 @@ useEffect(() => {
           <Route path='/Home' exact element={<Home  />} />
           <Route path='/CreateDivision' exact element={<CreateDivision/>} />
           <Route path='/seeDivisions' exact element={<SeeDivisions/>} />
+          <Route path='/Divisions' exact element={<Divisions/>} />
+          <Route path ='/Form' exact element ={<ParticipentForm/>} />
         </Routes>
       </div>
 
