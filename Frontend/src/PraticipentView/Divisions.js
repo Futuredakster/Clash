@@ -12,8 +12,8 @@ export const Divisions = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
 
-  const handleViewDetails = (divisionId,age_group) => {
-    const queryString = new URLSearchParams({ division_id: divisionId, age_group:age_group }).toString();
+  const handleViewDetails = (divisionId,age_group,proficiency_level) => {
+    const queryString = new URLSearchParams({ division_id: divisionId, age_group:age_group, proficiency_level:proficiency_level }).toString();
     navigate(`/Form?${queryString}`);
 };
 
@@ -52,7 +52,7 @@ export const Divisions = () => {
             <tr key={index}>
               <td>{item.age_group}</td>
               <td>{item.proficiency_level}</td>
-              <td><button className="btn btn-primary" onClick={ () => handleViewDetails(item.division_id,item.age_group)}> Register!</button></td>
+              <td><button className="btn btn-primary" onClick={ () => handleViewDetails(item.division_id,item.age_group,item.proficiency_level)}> Register!</button></td>
               </tr>
                ))}
                </tbody>

@@ -12,6 +12,7 @@ export const ParticipentForm = () => {
   const queryParams = new URLSearchParams(location.search);
   const division_id = queryParams.get("division_id") || ""; // Assuming you may have division_id in query params
   const age_group = queryParams.get("age_group");
+  const proficiency_level = queryParams.get("proficiency_level");
 
   const initialValues = {
     name: "",
@@ -19,6 +20,7 @@ export const ParticipentForm = () => {
     belt_color: "",
     division_id: division_id,
     age_group:age_group,
+    proficiency_level:proficiency_level,
   };
 
   const validationSchema = Yup.object().shape({
@@ -35,7 +37,7 @@ export const ParticipentForm = () => {
 
       console.log("Request successful:", response.data);
       if(!response.data.name){
-        alert("Your age dosent match");
+        alert(response.data.error);
         navigate("/CompetitorView");
       } else{
       navigate("/LandingPage");
