@@ -62,6 +62,23 @@ router.get("/praticipent", async (req, res) => {
   }
 });
 
+router.get("/default", async (req, res) => {
+  try {
+    const { tournament_id } = req.query;
+    const tournament = await tournaments.findOne({
+      where: { tournament_id: tournament_id }
+    });
+    
+    if (!tournament) {
+      return res.status(404).json({ error: 'Tournament not found' });
+    }
+
+    res.json(tournament);
+  } catch (error) {
+    console.error('Error fetching tournament:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 router.get("/byaccount", validateToken, async (req, res) => {
   const { tournament_name } = req.query;

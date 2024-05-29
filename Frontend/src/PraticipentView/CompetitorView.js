@@ -2,17 +2,21 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Searchbar from '../Searchbar';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-const CompetitorView = () => {
+const CompetitorView = ({ setProps }) => {
     const [data, setData] = useState([]);
     const [search, setSearch] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleViewDetails = (tournamentId, tournamentName) => {
-        const queryString = new URLSearchParams({ tournament_id: tournamentId, tournament_name:tournamentName }).toString();
+    const handleViewDetails = (tournament) => {
+        setProps(tournament);
+        const queryString = new URLSearchParams({
+            tournament_id: tournament.tournament_id,
+        }).toString();
         navigate(`/Divisions?${queryString}`);
     };
-
 
     useEffect(() => {
         axios.get('http://localhost:3001/tournaments/praticipent', {
@@ -22,13 +26,15 @@ const CompetitorView = () => {
         })
             .then(response => {
                 if (response.data.error) {
-                    alert(response.data.error);
+                    setError(response.data.error);
                 } else {
                     setData(response.data);
+                    setError('');
                 }
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
+                setError('An error occurred while fetching data.');
             });
     }, [search]);
 
@@ -38,11 +44,12 @@ const CompetitorView = () => {
                 search={search}
                 setSearch={setSearch}
             />
+            {error && <div className="alert alert-danger">{error}</div>}
             <div className="row">
                 {data.map((item, index) => (
                     <div key={index} className="col-md-4 mb-4">
                         <div className="card h-100">
-                            {item.imageUrl && 
+                            {item.imageUrl &&
                                 <img src={item.imageUrl} className="card-img-top" alt={item.tournament_name} />
                             }
                             <div className="card-body">
@@ -51,7 +58,7 @@ const CompetitorView = () => {
                                 <p className="card-text">End Date: {item.end_date}</p>
                                 <button 
                                     className="btn btn-primary"
-                                    onClick={() => handleViewDetails(item.tournament_id,item.tournament_name)}
+                                    onClick={() => handleViewDetails(item)}
                                 >
                                     View Details
                                 </button>
@@ -63,5 +70,9 @@ const CompetitorView = () => {
         </div>
     );
 }
+
+CompetitorView.propTypes = {
+    setProps: PropTypes.func.isRequired,
+};
 
 export default CompetitorView;

@@ -13,6 +13,7 @@ router.post('/', async (req, res) => {
     if (!isAge(age_group,date_of_birth)) {
       return res.json({ error: 'Wrong age' });
     }
+    console.log(proficiency_level)
      if(!canCompete(proficiency_level,belt_color)){
      return  res.json({error: "Wrong division level"})
      }

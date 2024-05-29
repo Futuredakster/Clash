@@ -31,6 +31,15 @@ router.post('/', validateToken, async (req, res) => {
       res.json(divisions);
   });
 
+  router.get('/default',async (req,res) => {
+    const { division_id } = req.query;
+    const divisions = await Divisions.findOne({
+        where: {division_id:division_id},
+      });
+      res.json(divisions);
+  });
+
+
 
   router.patch("/", validateToken, async (req, res) => {
     try {

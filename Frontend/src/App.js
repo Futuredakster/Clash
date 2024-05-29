@@ -22,6 +22,9 @@ const accessToken = localStorage.getItem("accessToken");
 
 function App() {
 const [authState, setAuthState] = useState({username:"", id:0, status:false,accoint_id:0});
+const [props, setProps] = useState([]);
+const [division,setDivision] = useState([]);
+console.log(props);
 
 
 
@@ -70,15 +73,15 @@ useEffect(() => {
           <Route path='/CreateUsers' exact element ={<CreateUsers/>} />
           <Route path='/' element={!accessToken ? <Navigate to="/LandingPage" /> : <Navigate to="/Home" />} />
           <Route path='/AccountUser' exact element ={<AccountUser/>} />
-          <Route path='/CompetitorView' exact element = {<CompetitorView/>} />
+          <Route path='/CompetitorView' exact element = {<CompetitorView setProps={setProps} />} />
           <Route path='/LandingPage' exact element ={<LandingPage/>} />
           <Route path='/CreateTournaments' exact element ={<CreateTournaments/>} />
           <Route path='/MyTournaments' exact element= {<MyTournaments />} />
           <Route path='/Home' exact element={<Home  />} />
           <Route path='/CreateDivision' exact element={<CreateDivision/>} />
           <Route path='/seeDivisions' exact element={<SeeDivisions/>} />
-          <Route path='/Divisions' exact element={<Divisions/>} />
-          <Route path ='/Form' exact element ={<ParticipentForm/>} />
+          <Route path='/Divisions' exact element={<Divisions props={props} setProps={setProps} setDivision={setDivision}/>} />
+          <Route path ='/Form' exact element ={<ParticipentForm division={division} />} />
         </Routes>
       </div>
 
