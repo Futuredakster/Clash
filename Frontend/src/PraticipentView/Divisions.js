@@ -1,29 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-
+import '../Divisions.css'; // Import the CSS file
 
 export const Divisions = ({ props, setProps, setDivision }) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const tournament_id = queryParams.get('tournament_id');
   const [data, setData] = useState([]);
-  const [tournamentName, setTournamentName] = useState('');
+  const [tournamentDetails, setTournamentDetails] = useState({});
   const navigate = useNavigate();
 
-  // Function to handle the "Register" button click
   const handleViewDetails = (item) => {
     setDivision(item);
     const queryString = new URLSearchParams({
       division_id: item.division_id,
-      age_group: item.age_group
+    //  age_group: item.age_group
     }).toString();
     navigate(`/Form?${queryString}`);
   };
 
-  // Function to fetch the tournament name
-  const fetchTournamentName = async () => {
+  const fetchTournamentDetails = async () => {
     try {
       const response = await axios.get("http://localhost:3001/tournaments/default", {
         params: { tournament_id }
@@ -31,15 +28,14 @@ export const Divisions = ({ props, setProps, setDivision }) => {
       if (response.data.error) {
         alert(response.data.error);
       } else {
-        setTournamentName(response.data);
+        setTournamentDetails(response.data);
         setProps(response.data);
       }
     } catch (error) {
-      console.error('Error fetching tournament name:', error);
+      console.error('Error fetching tournament details:', error);
     }
   };
 
-  // Effect to fetch data when the component mounts or when tournament_id or props change
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,23 +54,25 @@ export const Divisions = ({ props, setProps, setDivision }) => {
 
     fetchData();
 
-    // Fetch tournament name only if props is empty
     if (!props || props.length === 0) {
-      fetchTournamentName();
+      fetchTournamentDetails();
     }
   }, [tournament_id, props]);
 
   return (
     <div className="dashboard">
       <div className="header">
-        <h1>{tournamentName.tournament_name || (props.length !== 0 && props.tournament_name)}</h1>
+        <h1>{tournamentDetails.tournament_name || (props.length !== 0 && props.tournament_name)}</h1>
+        <p>Start Date: {tournamentDetails.start_date  || (props.length !== 0 && props.start_date)}</p>
+        <p>End Date: {tournamentDetails.end_date  || (props.length !== 0 && props.end_date)}</p>
       </div>
       <div className="dashboard-container">
         {data.map((item, index) => (
           <div className="card" key={index}>
-            <div className="card-title">{item.age_group}</div>
+            <div className="card-title">{item.division_name}</div>
             <div className="card-content">
-              <strong>Proficiency Level:</strong> {item.proficiency_level}
+              <p><strong>Age Range:</strong> {item.age_group}</p>
+              <p><strong>Proficiency Level:</strong> {item.proficiency_level}</p>
             </div>
             <button className="btn btn-primary" onClick={() => handleViewDetails(item)}>
               Register!

@@ -11,7 +11,7 @@ export const ParticipentForm = ({ division }) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const division_id = queryParams.get("division_id") || ""; 
-  const age_group = queryParams.get("age_group");
+//const age_group = queryParams.get("age_group");
 
   const [data, setData] = useState(null); 
   const [loading, setLoading] = useState(true); 
@@ -48,7 +48,7 @@ export const ParticipentForm = ({ division }) => {
     date_of_birth: "",
     belt_color: "",
     division_id: division_id,
-    age_group: age_group,
+    age_group: division?.age_group || data?.age_group || "",
     proficiency_level: division?.proficiency_level || data?.proficiency_level || "",
   };
 
