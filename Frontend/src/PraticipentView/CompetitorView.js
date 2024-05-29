@@ -3,6 +3,7 @@ import axios from 'axios';
 import Searchbar from '../Searchbar';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import '../Divisions.css';
 
 const CompetitorView = ({ setProps }) => {
     const [data, setData] = useState([]);

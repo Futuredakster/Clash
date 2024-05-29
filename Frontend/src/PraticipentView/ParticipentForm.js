@@ -10,17 +10,17 @@ export const ParticipentForm = ({ division }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const division_id = queryParams.get("division_id") || ""; // Assuming you may have division_id in query params
+  const division_id = queryParams.get("division_id") || ""; 
   const age_group = queryParams.get("age_group");
 
-
-  const [data, setData] = useState(null); // Initialize as null
-  const [loading, setLoading] = useState(true); // Loading state
+  const [data, setData] = useState(null); 
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     if (!division || Object.keys(division).length === 0) {
       fetchDivisionData();
     } else {
+      setData(division);
       setLoading(false);
     }
   }, [division]);
@@ -49,7 +49,7 @@ export const ParticipentForm = ({ division }) => {
     belt_color: "",
     division_id: division_id,
     age_group: age_group,
-    proficiency_level: division.proficiency_level || (data && data.proficiency_level) || "",
+    proficiency_level: division?.proficiency_level || data?.proficiency_level || "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -65,8 +65,9 @@ export const ParticipentForm = ({ division }) => {
       const response = await axios.post("http://localhost:3001/practicepents", values);
       console.log("Request successful:", response.data);
       if (response.data.error) {
+        const queryString = new URLSearchParams({tournament_id: data?.tournament_id}).toString();
         alert(response.data.error);
-        navigate("/CompetitorView");
+        navigate(`/Divisions?${queryString}`);
       } else {
         navigate("/LandingPage");
       }
@@ -136,7 +137,6 @@ export const ParticipentForm = ({ division }) => {
                   />
                 </div>
 
-                {/* Hidden division_id field */}
                 <Field type="hidden" name="division_id" />
 
                 <Button type="submit" variant="primary" disabled={formik.isSubmitting}>

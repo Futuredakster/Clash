@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 
+
 export const Divisions = ({ props, setProps, setDivision }) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
