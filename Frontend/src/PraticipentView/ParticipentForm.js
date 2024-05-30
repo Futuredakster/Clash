@@ -10,8 +10,7 @@ export const ParticipentForm = ({ division }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const division_id = queryParams.get("division_id") || ""; 
-//const age_group = queryParams.get("age_group");
+  const division_id = queryParams.get("division_id") || "";
 
   const [data, setData] = useState(null); 
   const [loading, setLoading] = useState(true); 
@@ -50,6 +49,7 @@ export const ParticipentForm = ({ division }) => {
     division_id: division_id,
     age_group: division?.age_group || data?.age_group || "",
     proficiency_level: division?.proficiency_level || data?.proficiency_level || "",
+    email: "", // Add email to initial values
   };
 
   const validationSchema = Yup.object().shape({
@@ -57,6 +57,7 @@ export const ParticipentForm = ({ division }) => {
     date_of_birth: Yup.date().required("Date of Birth is required"),
     belt_color: Yup.string().required("Belt Color is required"),
     division_id: Yup.number().required("Division ID is required"),
+    email: Yup.string().email("Invalid email format").required("Email is required"), // Add email validation
   });
 
   const onSubmit = async (values, { setSubmitting }) => {
@@ -65,7 +66,7 @@ export const ParticipentForm = ({ division }) => {
       const response = await axios.post("http://localhost:3001/practicepents", values);
       console.log("Request successful:", response.data);
       if (response.data.error) {
-        const queryString = new URLSearchParams({tournament_id: data?.tournament_id}).toString();
+        const queryString = new URLSearchParams({ tournament_id: data?.tournament_id }).toString();
         alert(response.data.error);
         navigate(`/Divisions?${queryString}`);
       } else {
@@ -133,6 +134,20 @@ export const ParticipentForm = ({ division }) => {
                     id="belt_color"
                     name="belt_color"
                     placeholder="Enter belt color"
+                    className="form-control"
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">
+                    Email:
+                  </label>
+                  <ErrorMessage name="email" component="div" className="text-danger" />
+                  <Field
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter email"
                     className="form-control"
                   />
                 </div>

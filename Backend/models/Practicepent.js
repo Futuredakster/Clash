@@ -28,6 +28,10 @@ module.exports = function(sequelize, DataTypes) {
         key: 'division_id',
         name: 'fk_practicepent_division_id' // Explicitly name the foreign key constraint
       }
+    },
+    email: { // Add the email field here
+      type: DataTypes.STRING(255),
+      allowNull: true
     }
   }, {
     sequelize,
@@ -59,4 +63,3 @@ module.exports = function(sequelize, DataTypes) {
 
   return Practicepent;
 };
-
