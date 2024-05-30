@@ -28,14 +28,28 @@ router.post('/', async (req, res) => {
       email
     });
    // emailer(email);
-    
-
     res.status(201).json(newParticipant);
   } catch (error) {
     console.error('Error creating participant:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+router.get('/', async (req,res)=>{
+  const { division_id } = req.query;
+  try{
+  const names = await participant.findAll({
+    where: {
+      division_id: division_id
+    },
+    attributes: ['name']
+  });
+
+  res.json(names);
+} catch (error) {
+  console.error('Error fetching participants:', error);
+  throw error;
+}
+})
 
 
 

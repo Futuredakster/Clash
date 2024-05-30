@@ -20,6 +20,16 @@ export const Divisions = ({ props, setProps, setDivision }) => {
     navigate(`/Form?${queryString}`);
   };
 
+  const handleView = (item) => {
+    setDivision(item);
+    const queryString = new URLSearchParams({
+      division_id: item.division_id,
+    //  age_group: item.age_group
+    }).toString();
+    navigate(`/DisplayParticipents?${queryString}`);
+  };
+
+
   const fetchTournamentDetails = async () => {
     try {
       const response = await axios.get("http://localhost:3001/tournaments/default", {
@@ -78,6 +88,9 @@ export const Divisions = ({ props, setProps, setDivision }) => {
             </div>
             <button className="btn btn-primary" onClick={() => handleViewDetails(item)}>
               Register!
+            </button>
+            <button className="btn btn-primary" onClick={() => handleView(item)}>
+              See all participants!
             </button>
           </div>
         ))}

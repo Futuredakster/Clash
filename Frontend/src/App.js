@@ -10,6 +10,7 @@ import AccountUser from './Pages/AccountUser';
 import CompetitorView from './PraticipentView/CompetitorView';
 import CreateDivision from './Pages/CreateDivision';
 import SeeDivisions from './Pages/SeeDivisions';
+import DisplayParticipents from './PraticipentView/DisplayParticipents';
 import { ParticipentForm } from './PraticipentView/ParticipentForm';
 import { Divisions } from './PraticipentView/Divisions';
 import {AuthContext} from './helpers/AuthContext';
@@ -82,6 +83,7 @@ useEffect(() => {
           <Route path='/seeDivisions' exact element={<SeeDivisions/>} />
           <Route path='/Divisions' exact element={<Divisions props={props} setProps={setProps} setDivision={setDivision}/>} />
           <Route path ='/Form' exact element ={<ParticipentForm division={division} />} />
+          <Route path ='DisplayParticipents' exact element = {<DisplayParticipents/>} />
         </Routes>
       </div>
 

@@ -28,10 +28,6 @@ router.post('/', validateToken, async (req, res) => {
   router.get('/praticepent',async (req,res) =>{
     const { tournament_id } = req.query;
     
-   /* const divisions = await Divisions.findAll({
-      where: {tournament_id:tournament_id},
-    });*/
-  // /* 
 const divisions = await Divisions.findAll({
       where: { tournament_id: tournament_id },
       attributes: {
