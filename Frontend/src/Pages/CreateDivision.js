@@ -10,12 +10,13 @@ import { useLocation } from 'react-router-dom';
 const CreateDivision = () => {
   const navigate = useNavigate();
   const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const tournament_id = queryParams.get('tournament_id');
+  const queryParams = new URLSearchParams(location.search);
+  const tournament_id = queryParams.get('tournament_id');
 
   const initialValues = {
     age_group: "",
     proficiency_level: "",
+    gender: "",  // Add gender to initialValues
     tournament_id: tournament_id,
   };
 
@@ -23,6 +24,7 @@ const CreateDivision = () => {
     tournament_id: Yup.number().required("Tournament ID is required"),
     age_group: Yup.string().required("Age group is required"),
     proficiency_level: Yup.string().required("Proficiency level is required"),
+    gender: Yup.string().required("Gender is required"),  // Add validation for gender
   });
 
   const onSubmit = async (values, { setSubmitting }) => {
@@ -89,6 +91,23 @@ const CreateDivision = () => {
                     placeholder="Enter proficiency level"
                     className="form-control"
                   />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="gender" className="form-label">
+                    Gender:
+                  </label>
+                  <ErrorMessage name="gender" component="div" className="text-danger" />
+                  <Field
+                    as="select"
+                    id="gender"
+                    name="gender"
+                    className="form-control"
+                  >
+                    <option value="" label="Select gender" />
+                    <option value="Male" label="Male" />
+                    <option value="Female" label="Female" />
+                  </Field>
                 </div>
 
                 <Button type="submit" variant="primary" disabled={formik.isSubmitting}>

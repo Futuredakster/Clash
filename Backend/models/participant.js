@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
 module.exports = function(sequelize, DataTypes) {
-  const Practicepent = sequelize.define('Practicepent', {
-    id: {
+  const participant = sequelize.define('participant', {
+    participant_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -26,17 +26,29 @@ module.exports = function(sequelize, DataTypes) {
       references: {
         model: 'Divisions',
         key: 'division_id',
-        name: 'fk_practicepent_division_id' // Explicitly name the foreign key constraint
+        name: 'fk_participant_division_id' // Explicitly name the foreign key constraint
       }
     },
-    email: { // Add the email field here
+    email: {
       type: DataTypes.STRING(255),
       allowNull: true
+    },
+    created_at: { // Add the created_at field
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: Sequelize.NOW
+    },
+    modified_at: { // Add the modified_at field
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: Sequelize.NOW
     }
   }, {
     sequelize,
-    tableName: 'practicepent',
-    timestamps: false,
+    tableName: 'participant',
+    timestamps: true, // Enable automatic timestamps
+    createdAt: 'created_at', // Specify the name of the createdAt field
+    updatedAt: 'modified_at', // Specify the name of the updatedAt field
     indexes: [
       {
         name: "PRIMARY",
@@ -57,9 +69,10 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   // Set up the association with Divisions
-  Practicepent.associate = function(models) {
-    Practicepent.belongsTo(models.Divisions, { foreignKey: 'division_id' });
+  participant.associate = function(models) {
+    participant.belongsTo(models.Divisions, { foreignKey: 'division_id' });
   };
 
-  return Practicepent;
+  return participant;
 };
+

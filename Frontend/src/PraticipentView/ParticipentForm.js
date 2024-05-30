@@ -63,7 +63,7 @@ export const ParticipentForm = ({ division }) => {
   const onSubmit = async (values, { setSubmitting }) => {
     console.log("Submitting values:", values);
     try {
-      const response = await axios.post("http://localhost:3001/practicepents", values);
+      const response = await axios.post("http://localhost:3001/participants", values);
       console.log("Request successful:", response.data);
       if (response.data.error) {
         const queryString = new URLSearchParams({ tournament_id: data?.tournament_id }).toString();

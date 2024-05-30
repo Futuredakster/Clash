@@ -7,7 +7,8 @@ const DivisionModal = ({ division_id, showModal, handleClose }) => {
   const [formData, setFormData] = useState({
     division_id: division_id,
     age_group: "",
-    proficiency_level: ""
+    proficiency_level: "",
+    gender: ""  // Add gender to formData state
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,10 +23,8 @@ const DivisionModal = ({ division_id, showModal, handleClose }) => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
-    if (!formData.age_group) newErrors.age_group = "Age group is required";
-    if (!formData.proficiency_level) newErrors.proficiency_level = "Proficiency level is required";
-    return newErrors;
+    // No validation errors needed as all fields are optional
+    return {};
   };
 
   const handleSubmit = async (e) => {
@@ -91,6 +90,24 @@ const DivisionModal = ({ division_id, showModal, handleClose }) => {
               {errors.proficiency_level}
             </Form.Control.Feedback>
           </Form.Group>
+          <Form.Group>
+            <Form.Label htmlFor="gender">Gender:</Form.Label>
+            <Form.Control
+              as="select"
+              id="gender"
+              name="gender"
+              value={formData.gender}
+              onChange={handleInputChange}
+              isInvalid={!!errors.gender}
+            >
+              <option value="" label="Select gender" />
+              <option value="Male" label="Male" />
+              <option value="Female" label="Female" />
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">
+              {errors.gender}
+            </Form.Control.Feedback>
+          </Form.Group>
           <Button type="submit" variant="primary" disabled={isSubmitting}>
             {isSubmitting ? 'Saving...' : 'Save Changes'}
           </Button>
@@ -106,3 +123,4 @@ const DivisionModal = ({ division_id, showModal, handleClose }) => {
 };
 
 export default DivisionModal;
+

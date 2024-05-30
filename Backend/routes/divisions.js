@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const {Divisions} = require ("../models");
+const {participant} = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
+const { Sequelize } = require('sequelize');
 
 
 router.post('/', validateToken, async (req, res) => {
@@ -25,9 +27,26 @@ router.post('/', validateToken, async (req, res) => {
 
   router.get('/praticepent',async (req,res) =>{
     const { tournament_id } = req.query;
-    const divisions = await Divisions.findAll({
-        where: {tournament_id:tournament_id},
-      });
+    
+   /* const divisions = await Divisions.findAll({
+      where: {tournament_id:tournament_id},
+    });*/
+  // /* 
+const divisions = await Divisions.findAll({
+      where: { tournament_id: tournament_id },
+      attributes: {
+        include: [
+          [Sequelize.fn('COUNT', Sequelize.col('participant_id')), 'participant_count']
+        ]
+      },
+      include: [
+        {
+          model: participant,
+          attributes: []
+        }
+      ],
+      group: ['Divisions.division_id']
+    });
       res.json(divisions);
   });
 
@@ -36,6 +55,7 @@ router.post('/', validateToken, async (req, res) => {
     const divisions = await Divisions.findOne({
         where: {division_id:division_id},
       });
+     // */
       res.json(divisions);
   });
 
@@ -50,6 +70,7 @@ router.post('/', validateToken, async (req, res) => {
         const Division = DivisionRes.dataValues;
         Division.age_group = isNotNullOrEmpty(data.age_group) ? data.age_group : Division.age_group;
         Division.proficiency_level = isNotNullOrEmpty(data.proficiency_level) ? data.proficiency_level : Division.proficiency_level;
+        Division.gender = isNotNullOrEmpty(data.gender) ? data.gender : Division.gender;
   
         await Divisions.update(Division, {
           where: { division_id: data.division_id }

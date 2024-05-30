@@ -84,6 +84,7 @@ const SeeDivisions = () => {
       <table>
         <thead>
           <tr>
+            <th>Gender</th>
             <th>Age Group</th>
             <th>Proficiency Level</th>
             <th>Edit</th>
@@ -92,6 +93,7 @@ const SeeDivisions = () => {
         <tbody>
           {data.map((item, index) => (
             <tr key={index}>
+              <td>{item.gender}</td>
               <td>{item.age_group}</td>
               <td>{item.proficiency_level}</td>
               <td>

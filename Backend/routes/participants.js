@@ -1,5 +1,5 @@
 const express = require("express");
-const {Practicepent} = require("../models");
+const {participant} = require("../models");
 const router = express.Router();
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey('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');
@@ -20,17 +20,15 @@ router.post('/', async (req, res) => {
      return  res.json({error: "Wrong division level"})
      }
 
-    const newParticipant = await Practicepent.create({
+    const newParticipant = await participant.create({
       name,
       date_of_birth,
       belt_color,
       division_id,
       email
     });
-    let num =0;
-    if(num>0){
-    emailer(email);
-    }
+   // emailer(email);
+    
 
     res.status(201).json(newParticipant);
   } catch (error) {
@@ -46,9 +44,9 @@ const emailer = (email) =>{
   const msg = {
     to: email, // Change to your recipient
     from: 'danny.kaikov.m@gmail.com', // Change to your verified sender
-    subject: 'Sending with SendGrid is Fun',
-    text: 'and easy to do anywhere, even with Node.js',
-    html: '<strong>Max is an idiot</strong>',
+    subject: 'Testing',
+    text: 'Did you watch Demon Slayer Episode 3 yet',
+    html: '<strong>Did you watch Demon Slayer Episode 3 yet ??</strong>',
   }
   sgMail
     .send(msg)
@@ -72,7 +70,7 @@ function canCompete(level, userBelt) {
   level = level.toLowerCase();
   userBelt = userBelt.toLowerCase();
 
-  if (level === "beginner") {
+  if (level === "begginer") {
       return beginnerBelts.includes(userBelt);
   } else if (level === "intermediate") {
       return intermediateBelts.includes(userBelt) || beginnerBelts.includes(userBelt);

@@ -23,8 +23,8 @@ app.use("/accounts",accountsRouter );
 const divisionRouter = require("./routes/divisions");
 app.use("/divisions",divisionRouter);
 
-const practicepentRouter = require("./routes/practicepents");
-app.use("/practicepents",practicepentRouter);
+const participantRouter = require("./routes/participants");
+app.use("/participants",participantRouter);
 
 
 

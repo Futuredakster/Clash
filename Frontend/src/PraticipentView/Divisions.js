@@ -71,8 +71,10 @@ export const Divisions = ({ props, setProps, setDivision }) => {
           <div className="card" key={index}>
             <div className="card-title">{item.division_name}</div>
             <div className="card-content">
+              <p><strong>Gender:</strong>{item.gender}</p>
               <p><strong>Age Range:</strong> {item.age_group}</p>
               <p><strong>Proficiency Level:</strong> {item.proficiency_level}</p>
+              <p><strong>Number of Competitors:</strong>{item.participant_count}</p>
             </div>
             <button className="btn btn-primary" onClick={() => handleViewDetails(item)}>
               Register!

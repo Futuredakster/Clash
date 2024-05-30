@@ -24,6 +24,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(20),
       allowNull: false
     },
+    gender: {
+      type: DataTypes.STRING(10), // Adjust the length as needed
+      allowNull: true // Set to false if this field is required
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -67,6 +71,10 @@ module.exports = function(sequelize, DataTypes) {
       }
     ]
   });
+
+  Divisions.associate = function(models) {
+    Divisions.hasMany(models.participant, { foreignKey: 'division_id' });
+  };
 
   // Hooks for updating timestamps
   Divisions.beforeCreate((division, options) => {
