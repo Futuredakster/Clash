@@ -8,7 +8,8 @@ const DivisionModal = ({ division_id, showModal, handleClose }) => {
     division_id: division_id,
     age_group: "",
     proficiency_level: "",
-    gender: ""  // Add gender to formData state
+    gender: "",  // Add gender to formData state
+    category: "" // Add category to formData state
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -108,6 +109,24 @@ const DivisionModal = ({ division_id, showModal, handleClose }) => {
               {errors.gender}
             </Form.Control.Feedback>
           </Form.Group>
+          <Form.Group>
+            <Form.Label htmlFor="category">Category:</Form.Label>
+            <Form.Control
+              as="select"
+              id="category"
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              isInvalid={!!errors.category}
+            >
+              <option value="" label="Select category" />
+              <option value="Kumite" label="Kumite" />
+              <option value="Kata" label="Kata" />
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">
+              {errors.category}
+            </Form.Control.Feedback>
+          </Form.Group>
           <Button type="submit" variant="primary" disabled={isSubmitting}>
             {isSubmitting ? 'Saving...' : 'Save Changes'}
           </Button>
@@ -123,4 +142,5 @@ const DivisionModal = ({ division_id, showModal, handleClose }) => {
 };
 
 export default DivisionModal;
+
 

@@ -40,7 +40,7 @@ const Tolpbar = () => {
               {!authState.status ?(
                    <Link to="/AccountUser" className="nav-link dropdown-toggle">Create New Account</Link>
             ):(
-              <h1 className="nav-link dropdown-toggle"> {authState.username} </h1>
+              <Link to="/EditUser" className="nav-link dropdown-toggle"> {authState.username} </Link>
             )}
               </li>
             </ul>

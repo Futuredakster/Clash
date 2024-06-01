@@ -1,4 +1,3 @@
-// File: DisplayParticipants.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -56,7 +55,7 @@ const LoadingMessage = styled.div`
   margin-top: 20px;
 `;
 
-const DisplayParticipants = () => {
+const SeeParticepents = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const division_id = queryParams.get('division_id') || '';
@@ -65,7 +64,16 @@ const DisplayParticipants = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/participants", {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      // Handle the case where accessToken is not available
+      console.error('Access token not found. API request not made.');
+      return;
+    }
+    axios.get("http://localhost:3001/participants/user", {
+      headers: {
+        accessToken: accessToken,
+      },
       params: { division_id: division_id },
     })
     .then(response => {
@@ -101,5 +109,4 @@ const DisplayParticipants = () => {
     </Container>
   );
 }
-
-export default DisplayParticipants;
+export default SeeParticepents

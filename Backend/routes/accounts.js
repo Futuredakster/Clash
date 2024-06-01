@@ -3,6 +3,7 @@ const router = express.Router();
 const { accounts } = require("../models");
 const { users } = require("../models");
 const bcrypt = require("bcrypt");
+const { validateToken } = require("../middlewares/AuthMiddleware");
 
 router.post("/", async (req, res) => {
   const post = req.body;
@@ -31,5 +32,23 @@ router.post("/user", async (req, res) => {
   res.json(a);
 });
 
+router.get("/info", validateToken, async (req, res) => {
+  try {
+    const userObj = req.user;
+ 
+    
+    const account = await accounts.findOne({
+      where: { account_id: userObj.account_id }
+    });
+
+    if (!account) {
+      return res.status(404).json({ error: "Account not found" });
+    }
+
+    res.json(account);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = router;

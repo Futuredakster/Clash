@@ -28,6 +28,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(10), // Adjust the length as needed
       allowNull: true // Set to false if this field is required
     },
+    category: {
+      type: DataTypes.STRING(20), // Adjust the length as needed
+      allowNull: false // Set to true if this field is optional
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,

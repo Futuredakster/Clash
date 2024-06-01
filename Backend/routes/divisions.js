@@ -41,7 +41,7 @@ const divisions = await Divisions.findAll({
           attributes: []
         }
       ],
-      group: ['Divisions.division_id']
+      group: ['division_id']
     });
       res.json(divisions);
   });
@@ -67,6 +67,7 @@ const divisions = await Divisions.findAll({
         Division.age_group = isNotNullOrEmpty(data.age_group) ? data.age_group : Division.age_group;
         Division.proficiency_level = isNotNullOrEmpty(data.proficiency_level) ? data.proficiency_level : Division.proficiency_level;
         Division.gender = isNotNullOrEmpty(data.gender) ? data.gender : Division.gender;
+        Division.category = isNotNullOrEmpty(data.category) ? data.category : Division.category;
   
         await Divisions.update(Division, {
           where: { division_id: data.division_id }

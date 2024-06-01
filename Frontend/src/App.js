@@ -11,6 +11,8 @@ import CompetitorView from './PraticipentView/CompetitorView';
 import CreateDivision from './Pages/CreateDivision';
 import SeeDivisions from './Pages/SeeDivisions';
 import DisplayParticipents from './PraticipentView/DisplayParticipents';
+import EditUser from './Pages/EditUser';
+import SeeParticepents from './Pages/SeeParticepents';
 import { ParticipentForm } from './PraticipentView/ParticipentForm';
 import { Divisions } from './PraticipentView/Divisions';
 import {AuthContext} from './helpers/AuthContext';
@@ -77,7 +79,9 @@ useEffect(() => {
           <Route path='/CompetitorView' exact element = {<CompetitorView setProps={setProps} />} />
           <Route path='/LandingPage' exact element ={<LandingPage/>} />
           <Route path='/CreateTournaments' exact element ={<CreateTournaments/>} />
+          <Route path ='SeeParticepents' exact element= {<SeeParticepents/>} />
           <Route path='/MyTournaments' exact element= {<MyTournaments />} />
+          <Route path='EditUser' exact element= {<EditUser/>} />
           <Route path='/Home' exact element={<Home  />} />
           <Route path='/CreateDivision' exact element={<CreateDivision/>} />
           <Route path='/seeDivisions' exact element={<SeeDivisions/>} />

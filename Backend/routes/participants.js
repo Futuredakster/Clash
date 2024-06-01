@@ -2,6 +2,7 @@ const express = require("express");
 const {participant} = require("../models");
 const router = express.Router();
 const sgMail = require('@sendgrid/mail')
+const { validateToken } = require("../middlewares/AuthMiddleware");
 sgMail.setApiKey('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');
 
 
@@ -15,9 +16,14 @@ router.post('/', async (req, res) => {
     if (!isAge(age_group,date_of_birth)) {
       return res.json({ error: 'Wrong age' });
     }
-    console.log(proficiency_level)
+
      if(!canCompete(proficiency_level,belt_color)){
-     return  res.json({error: "Wrong division level"})
+     return  res.json({error: "Wrong division level"});
+     }
+     
+     const emailExists = await compareEmail(email,division_id); 
+     if (emailExists) {
+       return res.json({ error: "This email is already registered" });
      }
 
     const newParticipant = await participant.create({
@@ -45,6 +51,22 @@ router.get('/', async (req,res)=>{
   });
 
   res.json(names);
+} catch (error) {
+  console.error('Error fetching participants:', error);
+  throw error;
+}
+})
+
+router.get('/user',validateToken, async (req,res)=>{
+  const { division_id } = req.query;
+  try{
+  const participants = await participant.findAll({
+    where: {
+      division_id: division_id
+    }
+  });
+
+  res.json(participants);
 } catch (error) {
   console.error('Error fetching participants:', error);
   throw error;
@@ -113,6 +135,18 @@ function isAge(age_group,date_of_birth){
   return true;
 }
 
+async function compareEmail(email,division_id){
+  const sameEmail = await participant.findOne({
+    where: {
+      email: email,
+      division_id: division_id,
+    },
+  });
+  if(sameEmail!=null){
+     return true;
+  }
+  return false;
+}
 
 
 module.exports = router;

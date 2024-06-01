@@ -17,6 +17,7 @@ const CreateDivision = () => {
     age_group: "",
     proficiency_level: "",
     gender: "",  // Add gender to initialValues
+    category: "", // Add category to initialValues
     tournament_id: tournament_id,
   };
 
@@ -25,6 +26,7 @@ const CreateDivision = () => {
     age_group: Yup.string().required("Age group is required"),
     proficiency_level: Yup.string().required("Proficiency level is required"),
     gender: Yup.string().required("Gender is required"),  // Add validation for gender
+    category: Yup.string().required("Category is required"), // Add validation for category
   });
 
   const onSubmit = async (values, { setSubmitting }) => {
@@ -107,6 +109,23 @@ const CreateDivision = () => {
                     <option value="" label="Select gender" />
                     <option value="Male" label="Male" />
                     <option value="Female" label="Female" />
+                  </Field>
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="category" className="form-label">
+                    Category:
+                  </label>
+                  <ErrorMessage name="category" component="div" className="text-danger" />
+                  <Field
+                    as="select"
+                    id="category"
+                    name="category"
+                    className="form-control"
+                  >
+                    <option value="" label="Select category" />
+                    <option value="kata" label="Kata" />
+                    <option value="kumite" label="Kumite" />
                   </Field>
                 </div>
 

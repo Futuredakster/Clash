@@ -24,7 +24,11 @@ const SeeDivisions = () => {
     newOpenStates[index] = !newOpenStates[index];
     setOpenStates(newOpenStates);
   };
-
+  
+  const forPart = (division_id) =>{
+    const quereString = new URLSearchParams({division_id:division_id}).toString();
+    navigate(`/SeeParticepents?${quereString}`)
+  }
   const onDelete = (division_id) => {
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
@@ -87,7 +91,9 @@ const SeeDivisions = () => {
             <th>Gender</th>
             <th>Age Group</th>
             <th>Proficiency Level</th>
+            <th>Category</th>
             <th>Edit</th>
+            <th>Participants</th>
           </tr>
         </thead>
         <tbody>
@@ -96,6 +102,7 @@ const SeeDivisions = () => {
               <td>{item.gender}</td>
               <td>{item.age_group}</td>
               <td>{item.proficiency_level}</td>
+              <td>{item.category}</td>
               <td>
               <Dropdown show={openStates[index]} onClick={() => toggleDropdown(index)}>
                   <Dropdown.Toggle variant="primary" id={`dropdown-basic-${index}`}>
@@ -108,6 +115,7 @@ const SeeDivisions = () => {
                   </Dropdown.Menu>
                 </Dropdown>
               </td>
+              <td><button variant="primary" onClick={() => {forPart(item.division_id) }}>Participants</button></td>
             </tr>
           ))}
         </tbody>
