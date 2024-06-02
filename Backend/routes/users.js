@@ -49,4 +49,12 @@ router.get('/auth', validateToken, (req,res) => {
 res.json(req.user);
 });
 
+router.get('/',validateToken,async (req,res) => {
+    const data = req.user;
+    const user = await users.findOne ({ 
+      where: { user_id: data.user_id }
+    });
+    res.json(user);
+})
+
 module.exports = router;

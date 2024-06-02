@@ -35,7 +35,7 @@ router.post("/user", async (req, res) => {
 router.get("/info", validateToken, async (req, res) => {
   try {
     const userObj = req.user;
- 
+   
     
     const account = await accounts.findOne({
       where: { account_id: userObj.account_id }
