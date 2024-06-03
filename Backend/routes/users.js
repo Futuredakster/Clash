@@ -52,9 +52,70 @@ res.json(req.user);
 router.get('/',validateToken,async (req,res) => {
     const data = req.user;
     const user = await users.findOne ({ 
-      where: { user_id: data.user_id }
+      where: { user_id: data.user_id },
+      attributes: { exclude: ['password_hash'] }
     });
     res.json(user);
 })
+
+router.patch("/", validateToken, async (req, res) => {
+  try {
+    const data = req.body;
+    const userRes = await users.findOne({ where: { user_id: data.user_id } });
+    
+    if (userRes) {
+      const user = userRes.dataValues;
+      user.username = isNotNullOrEmpty(data.username) ? data.username : user.username;
+      user.email = isNotNullOrEmpty(data.email) ? data.email : user.email;
+      console.log(user.username);
+
+      await users.update(user, {
+        where: { user_id: data.user_id }
+      });
+
+      res.status(200).json({ message: "Successfully updated" });
+    } else {
+      console.log("Not found");
+      res.status(404).json({ error: "Tournament not found" });
+    }
+  } catch (error) {
+    console.error("Error updating tournament:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.patch("/pass", validateToken, async (req, res) => {
+  const data = req.user;
+  const { password, newPassword } = req.body;
+
+  try {
+    const user = await users.findOne({ where: { user_id: data.user_id } });
+
+    if (!user) {
+      return res.json({ error: "User Doesn't Exist" });
+    }
+
+    const match = await bcrypt.compare(password, user.password_hash);
+    if (!match) {
+      return res.json({ error: "Wrong Password, please try again" });
+    }
+
+    const hash = await bcrypt.hash(newPassword, 10);
+    await users.update(
+      { password_hash: hash },
+      { where: { user_id: data.user_id } }
+    );
+
+    return res.json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "An error occurred while updating the password" });
+  }
+});
+
+function isNotNullOrEmpty(str) {
+  return str !== null && str !== '';
+}
+
 
 module.exports = router;

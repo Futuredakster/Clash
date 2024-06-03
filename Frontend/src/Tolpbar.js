@@ -1,15 +1,52 @@
 import { Link } from 'react-router-dom';
-import React, { useState,useContext } from "react";
+import React, { useState,useContext,useEffect } from "react";
+import axios from 'axios';
 import {AuthContext} from './helpers/AuthContext';
 
 const Tolpbar = () => {
     const {authState, setAuthState} = useContext(AuthContext);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error('Access token not found. API request not made.');
+        setError('Access token not found');
+        setLoading(false);
+        return;
+      }
+  
+      const fetchAccountInfo = async () => {
+        try {
+          const [userResponse] = await Promise.all([
+            axios.get('http://localhost:3001/users', {
+              headers: { accessToken },
+            }),
+          ]);
+          setUser(userResponse.data);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchAccountInfo();
+    }, []);
 
     const logout = () => {
         localStorage.removeItem("accessToken");
         setAuthState({ username: "", id: 0, status: false ,account_id: 0});
       };
 
+      const checkUsername = () => {
+        if (user && user.username) {
+            return user.username;
+        }
+        return authState.username;
+    };
     return (
         <nav className="navbar navbar-expand-lg bg-dark navbar-dark py-3">
     
@@ -40,7 +77,7 @@ const Tolpbar = () => {
               {!authState.status ?(
                    <Link to="/AccountUser" className="nav-link dropdown-toggle">Create New Account</Link>
             ):(
-              <Link to="/EditUser" className="nav-link dropdown-toggle"> {authState.username} </Link>
+              <Link to="/EditUser" className="nav-link dropdown-toggle"> {checkUsername()} </Link>
             )}
               </li>
             </ul>

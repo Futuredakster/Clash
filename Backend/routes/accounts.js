@@ -51,4 +51,35 @@ router.get("/info", validateToken, async (req, res) => {
   }
 });
 
+router.patch("/", validateToken, async (req, res) => {
+  try {
+    const data = req.body;
+    const accountRes = await accounts.findOne({ where: { account_id: data.account_id } });
+    
+    if (accountRes) {
+      const account = accountRes.dataValues;
+      account.account_name = isNotNullOrEmpty(data.account_name) ? data.account_name : account.account_name;
+      account.account_type = isNotNullOrEmpty(data.account_type) ? data.account_type : account.account_type;
+      account.account_description = isNotNullOrEmpty(data.account_description) ? data.account_description : account.account_description;
+      
+
+      await accounts.update(account, {
+        where: { account_id: data.account_id }
+      });
+
+      res.status(200).json({ message: "Successfully updated" });
+    } else {
+      console.log("Not found");
+      res.status(404).json({ error: "Tournament not found" });
+    }
+  } catch (error) {
+    console.error("Error updating tournament:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+function isNotNullOrEmpty(str) {
+  return str !== null && str !== '';
+}
+
 module.exports = router;
