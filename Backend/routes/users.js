@@ -122,7 +122,7 @@ router.patch("/pass", validateToken, async (req, res) => {
 });
 
 router.post("/verifyemail", async (req, res) => {
-  const email = req.body
+  const {email} = req.body
   const sameEmail = await users.findOne({
     where: {
       email: email,
@@ -130,7 +130,7 @@ router.post("/verifyemail", async (req, res) => {
   });
   if(sameEmail!=null){
     const verifyToken= sign({user_id:sameEmail.user_id }, "importanttoken");
-    const url = `http://localhost:3001/users/${verifyToken}`;
+    const url = `http://localhost:3000/users/${verifyToken}`;
     const msg = {
       to: email, // Change to your recipient
       from: 'danny.kaikov.m@gmail.com', // Change to your verified sender

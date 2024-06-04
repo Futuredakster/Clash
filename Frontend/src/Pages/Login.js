@@ -2,6 +2,7 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import React, { useState,useContext } from "react";
 import {AuthContext} from '../helpers/AuthContext';
+import { Link } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -44,6 +45,7 @@ function Login() {
       />
 
       <button onClick={login}> Login </button>
+      <Link to="/RecoverPassword" className="btn btn-primary"> Forgot Password</Link>
     </div>
   );
 }

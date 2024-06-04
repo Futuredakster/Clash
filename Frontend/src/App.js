@@ -16,6 +16,7 @@ import SeeParticepents from './Pages/SeeParticepents';
 import { ParticipentForm } from './PraticipentView/ParticipentForm';
 import { Divisions } from './PraticipentView/Divisions';
 import {AuthContext} from './helpers/AuthContext';
+import { RecoverPassword } from './RecoverPassword';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
@@ -88,6 +89,7 @@ useEffect(() => {
           <Route path='/Divisions' exact element={<Divisions props={props} setProps={setProps} setDivision={setDivision}/>} />
           <Route path ='/Form' exact element ={<ParticipentForm division={division} />} />
           <Route path ='DisplayParticipents' exact element = {<DisplayParticipents/>} />
+          <Route path ='RecoverPassword' exact element = {<RecoverPassword/>} />
         </Routes>
       </div>
 
