@@ -13,6 +13,7 @@ import SeeDivisions from './Pages/SeeDivisions';
 import DisplayParticipents from './PraticipentView/DisplayParticipents';
 import EditUser from './Pages/EditUser';
 import SeeParticepents from './Pages/SeeParticepents';
+import ForgotPass from './Pages/ForgotPass';
 import { ParticipentForm } from './PraticipentView/ParticipentForm';
 import { Divisions } from './PraticipentView/Divisions';
 import {AuthContext} from './helpers/AuthContext';
@@ -90,6 +91,8 @@ useEffect(() => {
           <Route path ='/Form' exact element ={<ParticipentForm division={division} />} />
           <Route path ='DisplayParticipents' exact element = {<DisplayParticipents/>} />
           <Route path ='RecoverPassword' exact element = {<RecoverPassword/>} />
+          <Route path ='ForgotPass' exact element = {<ForgotPass/>} />
+          
         </Routes>
       </div>
 

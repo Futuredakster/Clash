@@ -3,6 +3,7 @@ const router = express.Router();
 const { users } = require("../models");
 const bcrypt = require("bcrypt");
 const {validateToken} = require('../middlewares/AuthMiddleware')
+const {validate} = require('../middlewares/AuthMiddleware')
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey('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');
 
@@ -130,7 +131,7 @@ router.post("/verifyemail", async (req, res) => {
   });
   if(sameEmail!=null){
     const verifyToken= sign({user_id:sameEmail.user_id }, "importanttoken");
-    const url = `http://localhost:3000/users/${verifyToken}`;
+    const url = `http://localhost:3000/ForgotPass?token=${verifyToken}`;
     const msg = {
       to: email, // Change to your recipient
       from: 'danny.kaikov.m@gmail.com', // Change to your verified sender
@@ -152,6 +153,27 @@ router.post("/verifyemail", async (req, res) => {
   }
 })
 
+router.patch("/newpassword", validate, async (req, res) => {
+  const data = req.user;
+  const {password} = req.body;
+  const user = await users.findOne({
+    where: {
+      user_id:data.user_id
+    }
+  })
+  if(user){
+    const hash = await bcrypt.hash(password, 10);
+    await users.update(
+      { password_hash: hash },
+      { where: { user_id: data.user_id } }
+    );
+
+    return res.json({ message: "Password updated successfully" });
+  }
+  else{
+    res.json({error:"user not found"});
+  }
+})
 
 
 

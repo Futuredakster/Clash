@@ -23,4 +23,20 @@ const validateToken = (req,res,next) => {
 // we then check if the token is valid annd if it is we continue the action
 // if not we throw a 401 error
 
-module.exports = { validateToken };
+const validate = (req,res,next) => {
+    const token = req.header("token");
+
+    if (!token) return res.status(401).json({error: "User not logged in!"});
+    
+    try{
+    const validToken = verify(token, "importanttoken");
+    req.user=validToken;
+    if (token){
+        return next();
+    }
+    } catch (err) {
+       return res.status(401).json({error: err});
+    }
+};
+
+module.exports = { validateToken,validate };
