@@ -3,11 +3,19 @@ const router = express.Router();
 const { users } = require("../models");
 const bcrypt = require("bcrypt");
 const {validateToken} = require('../middlewares/AuthMiddleware')
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey('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');
+
 
 const {sign} = require('jsonwebtoken');
 
 router.post("/",validateToken, async (req, res) => {
   const { username, password_hash, email } = req.body;
+  const emailExists = await compareEmail(email); 
+  if(emailExists){
+    console.log("Nope sirrie bob")
+    return res.json({error: "This email already cooresponds to an account please login"});
+  }
   bcrypt.hash(password_hash, 10).then((hash) => {
     const account_id = req.user.account_id;
     users.create({
@@ -112,6 +120,57 @@ router.patch("/pass", validateToken, async (req, res) => {
     return res.status(500).json({ error: "An error occurred while updating the password" });
   }
 });
+
+router.post("/verifyemail", async (req, res) => {
+  const email = req.body
+  const sameEmail = await users.findOne({
+    where: {
+      email: email,
+    },
+  });
+  if(sameEmail!=null){
+    const verifyToken= sign({user_id:sameEmail.user_id }, "importanttoken");
+    const url = `http://localhost:3001/users/${verifyToken}`;
+    const msg = {
+      to: email, // Change to your recipient
+      from: 'danny.kaikov.m@gmail.com', // Change to your verified sender
+      subject: 'Testing',
+      text: 'Did you watch Demon Slayer Episode 3 yet',
+      html: `Please click this link to change your email: <a href="${url}">${url} </a>`,
+    }
+    sgMail
+      .send(msg)
+      .then(() => {
+        console.log('Email sent')
+        res.json({token:verifyToken,user_id:sameEmail.user_id });
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  } else{
+    res.json({error : "This user dosent exist "});
+  }
+})
+
+
+
+
+//  helper functions ----------------------------------------------------------------------------------------------------
+
+
+async function compareEmail(email){
+  const sameEmail = await users.findOne({
+    where: {
+      email: email,
+    },
+  });
+  if(sameEmail!=null){
+     return true;
+  }
+  return false;
+}
+
+
 
 function isNotNullOrEmpty(str) {
   return str !== null && str !== '';

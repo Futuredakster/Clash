@@ -20,6 +20,16 @@ router.post("/user", async (req, res) => {
   var a = await accounts.create(accountObj);
   userObj.account_id = a.account_id;
 
+  const sameEmail = await users.findOne({
+    where: {
+      email: userObj.email,
+    },
+  }); 
+  if(sameEmail){
+    console.log("No sirrie bob");
+    return res.json({error: "This email already cooresponds to an account please login"});
+  }
+
   bcrypt.hash(userObj.password_hash, 10).then((hash) => {
      users.create({
       username: userObj.username,
