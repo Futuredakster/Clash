@@ -130,14 +130,18 @@ router.post("/verifyemail", async (req, res) => {
     },
   });
   if(sameEmail!=null){
-    const verifyToken= sign({user_id:sameEmail.user_id }, "importanttoken");
+    const verifyToken = sign(
+      { user_id: sameEmail.user_id },
+      "importanttoken",
+      { expiresIn: '5m' } // Token expires in 5 minutes
+    );
     const url = `http://localhost:3000/ForgotPass?token=${verifyToken}`;
     const msg = {
       to: email, // Change to your recipient
       from: 'danny.kaikov.m@gmail.com', // Change to your verified sender
       subject: 'Testing',
       text: 'Did you watch Demon Slayer Episode 3 yet',
-      html: `Please click this link to change your email: <a href="${url}">${url} </a>`,
+      html: `Please click this link to change your password: <a href="${url}">${url} </a>`,
     }
     sgMail
       .send(msg)
