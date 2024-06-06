@@ -52,14 +52,19 @@ const UserModal = ({ user_id, showModal, handleClose }) => {
     const accessToken = localStorage.getItem("accessToken");
 
     try {
-      await axios.patch(`http://localhost:3001/users`, formData, {
+    const response=  await axios.patch(`http://localhost:3001/users`, formData, {
         headers: {
           accessToken: accessToken,
         }
       });
+      if(response.data.message){
       console.log('User data updated successfully');
       handleClose();
       window.location.reload();
+      } else{
+        alert(response.data.error);
+        handleClose();
+      }
     } catch (error) {
       setErrorMessage(error.response?.data?.message || 'Error updating user');
       setIsSubmitting(false);

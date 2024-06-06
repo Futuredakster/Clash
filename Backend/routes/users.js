@@ -76,7 +76,11 @@ router.patch("/", validateToken, async (req, res) => {
       const user = userRes.dataValues;
       user.username = isNotNullOrEmpty(data.username) ? data.username : user.username;
       user.email = isNotNullOrEmpty(data.email) ? data.email : user.email;
-      console.log(user.username);
+      
+      const check = await compareEmail(user.email);
+      if(check){
+       return res.json({error:"Email already exsists"});
+      }
 
       await users.update(user, {
         where: { user_id: data.user_id }
