@@ -18,6 +18,7 @@ import { ParticipentForm } from './PraticipentView/ParticipentForm';
 import { Divisions } from './PraticipentView/Divisions';
 import {AuthContext} from './helpers/AuthContext';
 import { RecoverPassword } from './RecoverPassword';
+import BracketApp from './Brackets/BracketApp';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
@@ -31,6 +32,15 @@ const [props, setProps] = useState([]);
 const [division,setDivision] = useState([]);
 console.log(props);
 
+const rounds = [
+  [
+    { team1: 'Team A', team2: 'Team B' },
+    { team1: 'Team C', team2: 'Team D' }
+  ],
+  [
+    { team1: 'Winner A/B', team2: 'Winner C/D' }
+  ]
+];
 
 
 
@@ -92,6 +102,7 @@ useEffect(() => {
           <Route path ='DisplayParticipents' exact element = {<DisplayParticipents/>} />
           <Route path ='RecoverPassword' exact element = {<RecoverPassword/>} />
           <Route path ='ForgotPass' exact element = {<ForgotPass/>} />
+          <Route path ='BracketApp' exact element = {<BracketApp/>} />
           
         </Routes>
       </div>
