@@ -20,15 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(50),
       allowNull: false
     },
-    division_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Divisions',
-        key: 'division_id',
-        name: 'fk_participant_division_id' // Explicitly name the foreign key constraint
-      }
-    },
+
     email: {
       type: DataTypes.STRING(255),
       allowNull: true
@@ -58,20 +50,25 @@ module.exports = function(sequelize, DataTypes) {
           { name: "id" },
         ]
       },
-      {
-        name: "division_id",
-        using: "BTREE",
-        fields: [
-          { name: "division_id" },
-        ]
-      }
     ]
   });
 
-  // Set up the association with Divisions
   participant.associate = function(models) {
-    participant.belongsTo(models.Divisions, { foreignKey: 'division_id' });
+    // Define many-to-many association with Divisions
+    participant.belongsToMany(models.Divisions, {
+      through: 'ParticipantDivision',
+      foreignKey: 'participant_id',
+      otherKey: 'division_id'
+    });
   };
+
+  /*/participant.belongsToMany(sequelize.models.Divisions, {
+    through: 'ParticipantDivision',
+    foreignKey: 'participant_id',
+    otherKey: 'division_id'
+  });*/
+
+  
 
   return participant;
 };

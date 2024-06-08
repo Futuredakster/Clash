@@ -37,7 +37,8 @@ const BracketApp = () => {
       "Phoenix Coyotes", "San Jose Sharks", "Montreal Wanderers", "Quebec Nordiques", 
       "Hartford Whalers"
     ];
-    setExampleTeams(shuffle(teams));
+    //setExampleTeams(shuffle(teams));
+    setExampleTeams(teams);
   }, []);
 
   const getBracket = (base) => {
@@ -84,7 +85,7 @@ const BracketApp = () => {
         baseR = i / baseT;
       }
     }
-
+  console.log("newBrackets",newBrackets);
     renderBrackets(newBrackets);
   };
 

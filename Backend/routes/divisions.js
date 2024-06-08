@@ -30,18 +30,6 @@ router.post('/', validateToken, async (req, res) => {
     
 const divisions = await Divisions.findAll({
       where: { tournament_id: tournament_id },
-      attributes: {
-        include: [
-          [Sequelize.fn('COUNT', Sequelize.col('participant_id')), 'participant_count']
-        ]
-      },
-      include: [
-        {
-          model: participant,
-          attributes: []
-        }
-      ],
-      group: ['division_id']
     });
       res.json(divisions);
   });
@@ -51,9 +39,9 @@ const divisions = await Divisions.findAll({
     const divisions = await Divisions.findOne({
         where: {division_id:division_id},
       });
-     // */
+    
       res.json(divisions);
-  });
+  }); 
 
 
 

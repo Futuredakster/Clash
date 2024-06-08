@@ -76,9 +76,6 @@ module.exports = function(sequelize, DataTypes) {
     ]
   });
 
-  Divisions.associate = function(models) {
-    Divisions.hasMany(models.participant, { foreignKey: 'division_id' });
-  };
 
   // Hooks for updating timestamps
   Divisions.beforeCreate((division, options) => {
@@ -89,6 +86,16 @@ module.exports = function(sequelize, DataTypes) {
   Divisions.beforeUpdate((division, options) => {
     division.modified_at = new Date();
   });
+
+
+  Divisions.associate = function(models) {
+    // Define many-to-many association with Participant
+    Divisions.belongsToMany(models.participant, {
+      through: 'ParticipantDivision',
+      foreignKey: 'division_id',
+      otherKey: 'participant_id'
+    });
+  };
 
   return Divisions;
 };
