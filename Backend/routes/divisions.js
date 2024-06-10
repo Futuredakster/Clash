@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {Divisions} = require ("../models");
 const {participant} = require("../models");
+const {ParticipantDivision} = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 const { Sequelize } = require('sequelize');
 
@@ -25,13 +26,33 @@ router.post('/', validateToken, async (req, res) => {
       res.json(divisions);
   });
 
-  router.get('/praticepent',async (req,res) =>{
+
+  router.get('/praticepent', async (req, res) => {
     const { tournament_id } = req.query;
-    
-const divisions = await Divisions.findAll({
-      where: { tournament_id: tournament_id },
-    });
+  
+    try {
+      const divisions = await Divisions.findAll({
+        where: { tournament_id },
+        attributes: {
+          include: [
+            [Sequelize.fn('COUNT', Sequelize.col('participant_id')), 'participant_count']
+          ]
+        },
+        include: [
+          {
+            model: ParticipantDivision,
+            as: 'participantDivisions', // Use the correct alias
+            attributes: [],
+          }
+        ],
+        group: ['Divisions.division_id']
+      });
+  
       res.json(divisions);
+    } catch (error) {
+      console.error('Error fetching divisions:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
   });
 
   router.get('/default',async (req,res) => {

@@ -53,10 +53,11 @@ router.get('/', async (req, res) => {
         division_id
       },
       attributes: ['participant_id']
+      // only return whats in the attribute
     });
 
     const ids = participantIds.map(pd => pd.participant_id);
-
+  // Filters it so you only get the values of the ids
     const participants = await participant.findAll({
       where: {
         participant_id: ids

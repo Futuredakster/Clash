@@ -97,5 +97,12 @@ module.exports = function(sequelize, DataTypes) {
     });
   };
 
+  Divisions.associate = (models) => {
+    Divisions.hasMany(models.ParticipantDivision, {
+      foreignKey: 'division_id',
+      as: 'participantDivisions'
+    });
+  };
+
   return Divisions;
 };
