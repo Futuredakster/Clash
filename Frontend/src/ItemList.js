@@ -22,6 +22,33 @@ const seeDivision = (tournamentName, tournamentId) =>{
   const queryString = new URLSearchParams({ tournament_name: tournamentName, tournament_id:tournamentId}).toString();
   navigate(`/seeDivisions?${queryString}`);
 }
+
+  const onPublish = (tournament_id) => {
+    if (!accessToken) {
+      console.error('Access token not found. Delete request cannot be made.');
+      return;
+    }
+
+    axios.patch(
+      'http://localhost:3001/tournaments/publish',
+      {
+        tournament_id: tournament_id,
+      },
+      {
+        headers: {
+          accessToken: accessToken,
+        },
+      }
+    )
+      .then(response => {
+        console.log(response.data);
+        console.log('Tournament posted successfully.');
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error posting tournament:', error);
+      })
+    }
   const onDelete = (tournament_id) => {
     if (!accessToken) {
       console.error('Access token not found. Delete request cannot be made.');
@@ -58,6 +85,7 @@ const seeDivision = (tournamentName, tournamentId) =>{
           <th>Divisions</th>
           <th>Image</th>
           <th>Edit</th>
+          <th>Published</th>
         </tr>
       </thead>
       <tbody>
@@ -89,6 +117,13 @@ const seeDivision = (tournamentName, tournamentId) =>{
               ) : (
                 <h6> Not your Tournament</h6>
               )}
+            </td>
+            <td>
+            {item.is_published === false ? (
+         <button onClick={() => onPublish(item.tournament_id)}>Publish</button>
+  ) : (
+    <h1>Published</h1>
+  )}
             </td>
           </tr>
         ))}

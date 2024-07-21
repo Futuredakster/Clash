@@ -200,6 +200,27 @@ router.patch("/", validateToken, upload.single('image'), async (req, res) => {
   }
 });
 
+router.patch("/publish", validateToken, async (req,res) => {
+  try {
+  const tournament_id = req.body.tournament_id;
+  const tournamentRes = await tournaments.findOne({ where: { account_id: req.user.account_id, tournament_id: tournament_id} });
+  if (tournamentRes) {
+    const Tournament = tournamentRes.dataValues;
+    Tournament.is_published = true;
+    await tournaments.update(Tournament, { 
+      where: { tournament_id: tournament_id }
+    });
+    res.status(200).json({ message: "Successfully updated" });
+  } else {
+    console.log("Not found");
+    res.status(404).json({ error: "Tournament not found" });
+  }
+} catch (error) {
+  console.error("Error updating tournament:", error);
+  res.status(500).json({ error: "Internal Server Error" });
+}
+})
+
 module.exports = router;
 
 /*router.patch("/", validateToken, async (req, res) => {

@@ -32,15 +32,6 @@ const [props, setProps] = useState([]);
 const [division,setDivision] = useState([]);
 console.log(props);
 
-const rounds = [
-  [
-    { team1: 'Team A', team2: 'Team B' },
-    { team1: 'Team C', team2: 'Team D' }
-  ],
-  [
-    { team1: 'Winner A/B', team2: 'Winner C/D' }
-  ]
-];
 
 
 

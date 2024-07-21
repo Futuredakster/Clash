@@ -96,7 +96,8 @@ router.get('/user', validateToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
+//
+  
 // Email function -----------------------------------------------------------------------------------------------------------------------------------
 const emailer = (email) => {
   const msg = {
