@@ -27,7 +27,6 @@ html, body, .brackets {
 .brackets > div > div > div {
     margin: 50px 0;
 }
-
 .bracketbox {
     position: relative;
     width: 100%;
@@ -35,42 +34,28 @@ html, body, .brackets {
     border-top: 1px solid #555;
     border-right: 1px solid #555;
     border-bottom: 1px solid #555;
+    display: flex; /* Aligns items in a row */
+    justify-content: space-between; /* Adds space between user1 and user2 */
+    padding: 10px;
 }
 
 .bracketbox > span {
-    position: absolute;
-    left: 40px;
+    position: static; /* Make sure span positions normally within flexbox */
     font-size: 0.85em;
+    margin: 0 10px; /* Adds space between text */
 }
 
-.info1 {
-    position: absolute;
-    top: -20px;
-    left: 280px;
-    font-size: 0.8em;
-    color: #BBB;
-}
-
-.info2 {
-    position: absolute;
-    bottom: -20px;
-    left: 280px;
-    font-size: 0.8em;
-    color: #BBB;
-}
-
-.teama {
-    top: -13.5px;
+.teama, .teamb {
     background-color: white;
     padding: 5px 20px;
     border: 1px solid black;
+    width: 45%; /* Ensure equal width for both user1 and user2 */
+    text-align: center; /* Center text inside the boxes */
 }
 
-.teamb {
-    bottom: -13.5px;
-    background-color: white;
-    padding: 5px 20px;
-    border: 1px solid black;
+.info1, .info2 {
+    font-size: 0.8em;
+    color: #BBB;
 }
 
 .teamc {

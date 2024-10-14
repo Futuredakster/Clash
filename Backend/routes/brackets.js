@@ -70,6 +70,43 @@ router.post("/", async (req, res) => {
       return res.status(500).json({ message: "Internal server error" });
     }
   });
+
+  router.get("/", async (req, res) => {
+    const { division_id } = req.query;
+  
+    // Log for debugging to see what division_id is being passed
+    console.log('division_id:', division_id);
+  
+    // Check if division_id is provided
+    if (!division_id) {
+      return res.status(400).json({ error: "division_id is required" });
+    }
+  
+    try {
+      // Query the database for brackets with the given division_id
+      const bracket = await brackets.findAll({
+        where: {
+          division_id: division_id // Ensure division_id is used correctly in the query
+        }
+      });
+  
+      // If no brackets found, return 404
+      if (bracket.length === 0) {
+        return res.status(404).json({ error: "No brackets found for the provided division_id" });
+      }
+  
+      // Return the found bracket
+      console.log(bracket);
+      return res.json(bracket);
+    } catch (error) {
+      // Log the error for debugging
+      console.error("Error fetching brackets:", error);
+  
+      // Return a 500 internal server error
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  
   
 
 module.exports = router;
