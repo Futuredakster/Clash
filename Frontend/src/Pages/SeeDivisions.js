@@ -29,6 +29,10 @@ const SeeDivisions = () => {
     const quereString = new URLSearchParams({division_id:division_id}).toString();
     navigate(`/SeeParticepents?${quereString}`)
   }
+  const forBrack = (division_id) =>{
+    const quereString = new URLSearchParams({division_id:division_id}).toString();
+    navigate(`/BracketApp?${quereString}`)
+  }
   const onDelete = (division_id) => {
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
@@ -94,6 +98,7 @@ const SeeDivisions = () => {
             <th>Category</th>
             <th>Edit</th>
             <th>Participants</th>
+            <th>Bracket Creator</th>
           </tr>
         </thead>
         <tbody>
@@ -116,6 +121,7 @@ const SeeDivisions = () => {
                 </Dropdown>
               </td>
               <td><button variant="primary" onClick={() => {forPart(item.division_id) }}>Participants</button></td>
+              <td><button variant="primary" onClick={() => {forBrack(item.division_id) }}>Create Brackets</button></td>
             </tr>
           ))}
         </tbody>

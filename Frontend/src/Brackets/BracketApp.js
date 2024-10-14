@@ -9,11 +9,16 @@ import random from 'lodash/random';
 import isNaN from 'lodash/isNaN';
 import last from 'lodash/last';
 import './Brackets.css';
+import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const BracketApp = () => {
   const [brackets, setBrackets] = useState([]);
   const [bracketCount, setBracketCount] = useState(0);
   const [exampleTeams, setExampleTeams] = useState([]);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const division_id = queryParams.get('division_id') || '';
 
   const knownBrackets = [2, 4, 8, 16, 32, 64];
 
@@ -40,6 +45,23 @@ const BracketApp = () => {
     //setExampleTeams(shuffle(teams));
     setExampleTeams(teams);
   }, []);
+
+  const makeAxiosCall = async () => {
+    if (!division_id) {
+      console.error('No division_id provided.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:3001/brackets', {
+        division_id,
+      });
+
+      console.log('Axios response:', response.data);
+    } catch (error) {
+      console.error('Error making Axios call:', error);
+    }
+  };
 
   const getBracket = (base) => {
     const closest = find(knownBrackets, (k) => k >= base);
@@ -87,6 +109,7 @@ const BracketApp = () => {
     }
   console.log("newBrackets",newBrackets);
     renderBrackets(newBrackets);
+    makeAxiosCall();
   };
 
   const renderBrackets = (struct) => {

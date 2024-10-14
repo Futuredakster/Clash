@@ -26,6 +26,9 @@ app.use("/divisions",divisionRouter);
 const participantRouter = require("./routes/participants");
 app.use("/participants",participantRouter);
 
+const bracketRouter = require("./routes/brackets");
+app.use("/brackets",bracketRouter);
+
 
 
 

@@ -1,23 +1,28 @@
 const Sequelize = require('sequelize');
+
 module.exports = function(sequelize, DataTypes) {
- const brackets= sequelize.define('brackets', {
+  const brackets = sequelize.define('brackets', {
     bracket_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    tournament_id: {
+    division_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: true, // Set to false if it should not be nullable
       references: {
-        model: 'tournaments',
-        key: 'tournament_id'
+        model: 'Divisions', // Ensure the model name matches the actual Divisions model
+        key: 'division_id'
       }
     },
-    bracket_type: {
-      type: DataTypes.STRING(50),
-      allowNull: true
+    user1: {
+      type: DataTypes.STRING(255), // Adjust length as needed
+      allowNull: true // Set to false if it should not be nullable
+    },
+    user2: {
+      type: DataTypes.STRING(255), // Adjust length as needed
+      allowNull: true // Set to false if it should not be nullable
     }
   }, {
     sequelize,
@@ -33,13 +38,14 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "tournament_id",
+        name: "division_id",
         using: "BTREE",
         fields: [
-          { name: "tournament_id" },
+          { name: "division_id" },
         ]
       },
     ]
   });
+  
   return brackets;
 };
