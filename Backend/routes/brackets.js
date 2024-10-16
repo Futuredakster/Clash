@@ -8,9 +8,9 @@ router.post("/", async (req, res) => {
   const { division_id } = req.body;
 
   try {
-    // Fetch participants for the given division
+    // Fetch participants for the given division, including their participant_id and name
     const participants = await participant.findAll({
-      attributes: ['name'], // Include participant_id
+      attributes: ['participant_id', 'name'], // Include both participant_id and name
       include: [
         {
           model: Divisions,
@@ -20,59 +20,82 @@ router.post("/", async (req, res) => {
       ]
     });
 
-    // Fetch existing brackets for this division
+    // Fetch existing brackets for this division, including participant_ids
     const existingBrackets = await brackets.findAll({
       where: { division_id },
-      attributes: ['user1', 'user2']
+      attributes: ['participant_id1', 'participant_id2']
     });
 
     const existingParticipants = new Set(
-      existingBrackets.flatMap(bracket => [bracket.user1, bracket.user2])
+      existingBrackets.flatMap(bracket => [bracket.participant_id1, bracket.participant_id2])
     );
 
+    // Filter available participants by participant_id
     const availableParticipants = participants.filter(
-      participant => !existingParticipants.has(participant.name)
+      participant => !existingParticipants.has(participant.participant_id)
     );
-
-    const participantNames = availableParticipants.map(participant => participant.name);
 
     // If only 1 available participant, return with a bracket against 'Bi'
-    if (participantNames.length === 1) {
-      const user1 = participantNames[0];
+    if (availableParticipants.length === 1) {
+      const participant_id1 = availableParticipants[0].participant_id;
+      const user1 = availableParticipants[0].name; // Get the name for user1
       const user2 = "Bi"; // Assign a 'Bye' opponent
 
-      await brackets.create({ division_id, user1, user2 });
+      await brackets.create({ division_id, participant_id1, participant_id2: null }); // You can keep participant_id2 null
       return res.json({ message: "Bracket created with one participant vs Bye", bracket: { user1, user2 } });
     }
 
-    // Shuffle participant names array for random pairing
+    // Shuffle available participants for random pairing
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]]; // Swap
       }
     }
-    
-    shuffleArray(participantNames);
+
+    shuffleArray(availableParticipants);
 
     // Pair participants and create brackets
     const bracketPromises = [];
-    while (participantNames.length > 1) {
-      const user1 = participantNames.pop();  // Get the last participant
-      const user2 = participantNames.pop();  // Get the next last participant
+    while (availableParticipants.length > 1) {
+      const participant1 = availableParticipants.pop();
+      const participant2 = availableParticipants.pop();
 
-      // Ensure both names are unique in the pairing
-      if (user1 !== user2) {
+      const participant_id1 = participant1.participant_id; // Get participant ID
+      const participant_id2 = participant2.participant_id; // Get participant ID
+      const user1 = participant1.name; // Get name for user1
+      const user2 = participant2.name; // Get name for user2
+
+      // Ensure both participant_ids are unique in the pairing
+      if (participant_id1 !== participant_id2) {
         // Create a bracket entry for this pair
-        bracketPromises.push(brackets.create({ division_id, user1, user2 }));
+        bracketPromises.push(
+          brackets.create({ 
+            division_id, 
+            participant_id1, 
+            participant_id2,
+            user1,
+            user2 
+          })
+        );
       }
     }
 
     // If one participant is left unpaired, pair them with 'Bi'
-    if (participantNames.length === 1) {
-      const user1 = participantNames.pop();
-      const user2 = "Bi";
-      bracketPromises.push(brackets.create({ division_id, user1, user2 }));
+    if (availableParticipants.length === 1) {
+      const participant1 = availableParticipants.pop();
+      const participant_id1 = participant1.participant_id;
+      const user1 = participant1.name; // Get name for user1
+      const user2 = "Bi"; // Assign a 'Bye' opponent
+      bracketPromises.push(
+        brackets.create({ 
+          division_id, 
+          participant_id1, 
+          participant_id2: null,
+          user1,
+          user2 
+        })
+      ); // Keep participant_id2 null
     }
 
     // Wait for all bracket creation promises to complete

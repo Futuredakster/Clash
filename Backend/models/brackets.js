@@ -23,6 +23,22 @@ module.exports = function(sequelize, DataTypes) {
     user2: {
       type: DataTypes.STRING(255), // Adjust length as needed
       allowNull: true // Set to false if it should not be nullable
+    },
+    participant_id1: {
+      type: DataTypes.INTEGER, // Assuming participant IDs are integers
+      allowNull: false, // Set to true if this can be nullable
+      references: {
+        model: 'Participants', // Ensure the model name matches the actual Participants model
+        key: 'participant_id'
+      }
+    },
+    participant_id2: {
+      type: DataTypes.INTEGER, // Assuming participant IDs are integers
+      allowNull: false, // Set to true if this can be nullable
+      references: {
+        model: 'Participants', // Ensure the model name matches the actual Participants model
+        key: 'participant_id'
+      }
     }
   }, {
     sequelize,
@@ -49,3 +65,4 @@ module.exports = function(sequelize, DataTypes) {
   
   return brackets;
 };
+
