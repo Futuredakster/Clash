@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import map from 'lodash/map';
-import uniq from 'lodash/uniq';
-import './Brackets.css';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import './Brackets.css';
+import { useLocation } from 'react-router-dom'; // For retrieving division_id from query params
 
-const BracketApp = () => {
-  const [brackets, setBrackets] = useState([]);
+const TournamentBracket = () => {
+  const [bracketData, setBracketData] = useState([]);
   const [bracketCount, setBracketCount] = useState(0);
+
+  // Getting division_id from URL params (e.g., ?division_id=123)
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const division_id = queryParams.get('division_id') || '';
 
-  // Fetch brackets and generate brackets when the button is clicked
+  // Fetch brackets and generate them when the button is clicked
   const generateBracket = async () => {
     if (!division_id) {
       console.error('No division_id provided.');
@@ -20,84 +20,99 @@ const BracketApp = () => {
     }
 
     try {
-      // Fetch brackets from the backend
+      const response = await axios.post('http://localhost:3001/brackets', {
+        division_id,
+      });
+      console.log('Axios response:', response.data);
+    } catch (error) {
+      console.error('Error making Axios call:', error);
+    }
+
+    try {
+      // Fetch brackets from the backend with the division_id
       const response = await axios.get('http://localhost:3001/brackets', {
         params: { division_id },
       });
-      let fetchedBrackets = response.data;  // Store fetched brackets
+
+      let fetchedBrackets = response.data;
       console.log('Fetched brackets:', fetchedBrackets);
 
       // Sort fetched brackets by bracket_id
       fetchedBrackets = fetchedBrackets.sort((a, b) => a.bracket_id - b.bracket_id);
 
-      let bracketSize = fetchedBrackets.length;  // Use fetched number of brackets
-      if (bracketSize === 0) {
-        console.error("No brackets found to display");
-        return;
-      }
-
       const newBrackets = [];
 
-      for (let i = 0; i < bracketSize; i++) {
-        const user1 = fetchedBrackets[i]?.user1 || "Bye";  // Handle empty user1
-        const user2 = fetchedBrackets[i]?.user2 || "Bye";  // Handle empty user2
-
+      // Build bracket structure based on fetched data
+      fetchedBrackets.forEach((bracket) => {
         newBrackets.push({
-          nextGame: i + 1 > bracketSize - 1 ? null : i + 1,
-          user1: user1,
-          user2: user2,
-          bracketNo: fetchedBrackets[i].bracket_id,
-          bye: !user1 || !user2,
+          user1: bracket.user1 || 'Bye',
+          user2: bracket.user2 || 'Bye',
+          score1: bracket.score1 || 0, // Assuming the score comes from your backend
+          score2: bracket.score2 || 0, // Assuming the score comes from your backend
+          winner: bracket.winner, // Assuming your backend provides a winner field
         });
-      }
+      });
 
-      console.log("newBrackets", newBrackets);
-      renderBrackets(newBrackets);
+      setBracketData(newBrackets); // Update state with the fetched brackets
+      setBracketCount((prevCount) => prevCount + 1); // Track bracket count
     } catch (error) {
       console.error('Error fetching brackets from backend:', error);
     }
   };
 
-  const renderBrackets = (struct) => {
-    // Instead of grouping by round (as your data doesn't seem to have rounds),
-    // display each bracket one after the other in a simple list.
-    const group = (
-      <div className={`group${bracketCount}`} id={`b${bracketCount}`}>
-        {map(struct, (gg, idx) => (
-          <div key={idx}>
-            {gg.bye ? (
-              <div></div>
-            ) : (
-              <div className="bracketbox">
-                <span className="info1">Bracket {gg.bracketNo}</span>
-                <span className="teama">{gg.user1}</span>  {/* Display user1 */}
-                <span className="teamb">{gg.user2}</span>  {/* Display user2 */}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    );
 
-    setBrackets((prevBrackets) => [...prevBrackets, group]);
-    setBracketCount((prevCount) => prevCount + 1);
-  };
-
+  // Clear brackets function
   const clearBrackets = () => {
-    setBrackets([]);
+    setBracketData([]);
+    setBracketCount(0);
   };
 
   return (
     <div>
-      <button id="add" onClick={generateBracket}>Show Brackets</button> {/* Fetches and generates brackets when clicked */}
-      <button id="clear" onClick={clearBrackets}>Clear Brackets</button>
-      <div className="brackets" id="brackets">
-        {brackets.map((bracketGroup, idx) => (
-          <div key={idx}>{bracketGroup}</div>
-        ))}
-      </div>
+      <button id="add" onClick={generateBracket}>Show Brackets</button> {/* Fetches and generates brackets when clicked */} 
+      <button id="clear" onClick={clearBrackets}>Clear Brackets</button> 
+
+      <main id="tournament" style={{ display: 'flex', flexDirection: 'row' }}>
+        {bracketData.length > 0 ? (
+          <>
+            {/* Vertical stack of initial players */}
+            <div className="rounds">
+              {bracketData.map((bracket, idx) => (
+                <ul className="round" key={idx} style={{
+                  display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '200px', listStyle: 'none', padding: 0
+                }}>
+                  <li className={`game game-top ${bracket.winner === 'user1' ? 'winner' : ''}`} style={{ borderBottom: '1px solid #aaa', paddingLeft: '20px' }}>
+                    {bracket.user1} <span>{bracket.score1}</span>
+                  </li>
+                  <li className="game-spacer" style={{ borderRight: '1px solid #aaa', minHeight: '40px' }}>&nbsp;</li>
+                  <li className={`game game-bottom ${bracket.winner === 'user2' ? 'winner' : ''}`} style={{ borderTop: '1px solid #aaa', paddingLeft: '20px' }}>
+                    {bracket.user2} <span>{bracket.score2}</span>
+                  </li>
+                  <li className="spacer">&nbsp;</li>
+                </ul>
+              ))}
+            </div>
+            {/* Horizontal winners */}
+            <div className="winners" style={{ display: 'flex', flexDirection: 'row' }}>
+              {bracketData.map((bracket, idx) => (
+                <div key={idx} style={{ padding: '0 20px' }}>
+                  {bracket.winner ? (
+                    <div>
+                      Winner: {bracket.winner === 'user1' ? bracket.user1 : bracket.user2}
+                    </div>
+                  ) : (
+                    <div>&nbsp;</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p>No brackets to display. Click 'Show Brackets' to fetch data.</p>
+        )}
+      </main>
     </div>
   );
 };
 
-export default BracketApp;
+export default TournamentBracket;
