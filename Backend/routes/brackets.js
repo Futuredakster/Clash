@@ -3,7 +3,6 @@ const router = express.Router();
 const { Divisions, participant, brackets } = require("../models"); 
 const { validateToken } = require("../middlewares/AuthMiddleware");
 const { Sequelize } = require('sequelize');
-
 router.post("/", async (req, res) => {
   const { division_id } = req.body;
 
@@ -91,7 +90,7 @@ router.post("/", async (req, res) => {
         brackets.create({ 
           division_id, 
           participant_id1, 
-          participant_id2: null,
+          participant_id2: -1,
           user1,
           user2 
         })
@@ -107,6 +106,7 @@ router.post("/", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 
   router.get("/", async (req, res) => {
