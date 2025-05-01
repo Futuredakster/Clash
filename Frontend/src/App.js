@@ -19,6 +19,7 @@ import { Divisions } from './PraticipentView/Divisions';
 import {AuthContext} from './helpers/AuthContext';
 import { RecoverPassword } from './RecoverPassword';
 import BracketApp from './Brackets/BracketApp';
+import PointTracker from './Brackets/PointTracker';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
@@ -94,6 +95,7 @@ useEffect(() => {
           <Route path ='RecoverPassword' exact element = {<RecoverPassword/>} />
           <Route path ='ForgotPass' exact element = {<ForgotPass/>} />
           <Route path ='BracketApp' exact element = {<BracketApp/>} />
+          <Route path ='PointTracker' exact element= {<PointTracker/>} />
           
         </Routes>
       </div>

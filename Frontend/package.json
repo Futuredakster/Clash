@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@g-loot/react-tournament-brackets": "^1.0.31-rc",
     "@mui/material": "^5.15.19",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -25,6 +26,7 @@
     "react-helmet": "^6.1.0",
     "react-router-dom": "^6.20.1",
     "react-scripts": "5.0.1",
+    "react-svg-pan-zoom": "^3.13.1",
     "react-tournament-bracket": "^0.2.4",
     "styled-components": "^6.1.11",
     "web-vitals": "^2.1.4",
