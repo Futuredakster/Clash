@@ -24,21 +24,47 @@ router.post("/", async (req, res) => {
     // Fetch existing brackets with win_user info
     const existingBrackets = await brackets.findAll({
       where: { division_id },
-      attributes: ['participant_id1', 'participant_id2', 'win_user1', 'win_user2'],
+      attributes: ['participant_id1', 'participant_id2', 'win_user1', 'win_user2', 'round'],
       order: [['bracket_id', 'ASC']]
     });
 
+    // Determine the next round number
+    let nextRound = 1;
+    const roundsWithWinners = existingBrackets
+      .filter(bracket => bracket.win_user1 || bracket.win_user2)
+      .map(bracket => bracket.round);
+    if (roundsWithWinners.length > 0) {
+      nextRound = Math.max(...roundsWithWinners) + 1;
+    }
+    console.log("Next round will be:", nextRound);
+
+    // Collect unavailable participants based on win/lose logic
     const unavailableParticipantIds = new Set();
-    for(let i =0; i<existingBrackets.length;i++){
-      if(existingBrackets[i+1] != undefined){
-      if(existingBrackets[i].win_user1 === true  && existingBrackets[i+1].win_user1 === false && existingBrackets[i+1].win_user2 === false){
-        unavailableParticipantIds.add(existingBrackets[i].participant_id1)
+
+    for (let i = 0; i < existingBrackets.length; i += 2) {
+      const bracket1 = existingBrackets[i];
+      const bracket2 = existingBrackets[i + 1];
+
+      if (!bracket2) continue;
+
+      const b1HasWinner = bracket1.win_user1 || bracket1.win_user2;
+      const b2HasWinner = bracket2.win_user1 || bracket2.win_user2;
+
+      const b1NoWinner = !bracket1.win_user1 && !bracket1.win_user2;
+      const b2NoWinner = !bracket2.win_user1 && !bracket2.win_user2;
+
+      if (b1HasWinner && b2NoWinner) {
+        if (bracket1.win_user1) unavailableParticipantIds.add(bracket1.participant_id1);
+        if (bracket1.win_user2) unavailableParticipantIds.add(bracket1.participant_id2);
       }
-      if(existingBrackets[i].win_user2 === true  && existingBrackets[i+1].win_user1 === false && existingBrackets[i+1].win_user2 === false){
-        unavailableParticipantIds.add(existingBrackets[i].participant_id2)
+
+      if (b2HasWinner && b1NoWinner) {
+        if (bracket2.win_user1) unavailableParticipantIds.add(bracket2.participant_id1);
+        if (bracket2.win_user2) unavailableParticipantIds.add(bracket2.participant_id2);
       }
     }
-    }
+
+    // Add losers to unavailable set
     existingBrackets.forEach(bracket => {
       if (bracket.participant_id1 && bracket.win_user1 === false) {
         unavailableParticipantIds.add(bracket.participant_id1);
@@ -52,26 +78,34 @@ router.post("/", async (req, res) => {
       p => !unavailableParticipantIds.has(p.participant_id)
     );
 
-    // If only 1 available participant, return with a bracket against 'Bi'
-    if (availableParticipants.length === 1) {
+    const biAlreadyUsed = existingBrackets.some(
+      bracket => bracket.participant_id1 === -1 || bracket.participant_id2 === -1
+    );
+
+    // If only 1 available participant, create Bye bracket
+    if (availableParticipants.length === 1 && !biAlreadyUsed) {
       const participant_id1 = availableParticipants[0].participant_id;
       const user1 = availableParticipants[0].name;
       const user2 = "Bi";
 
-      await brackets.create({ 
-        division_id, 
-        participant_id1, 
-        participant_id2: null, 
-        win_user1: true, // Important: set false immediately
-        win_user2: false, // Important: set false immediately
+      await brackets.create({
+        division_id,
+        participant_id1,
+        participant_id2: -1,
+        win_user1: false,
+        win_user2: false,
         user1,
-        user2 
+        user2,
+        round: nextRound
       });
 
-      return res.json({ message: "Bracket created with one participant vs Bye", bracket: { user1, user2 } });
+      return res.json({
+        message: "Bracket created with one participant vs Bye",
+        bracket: { user1, user2 }
+      });
     }
 
-    // Shuffle available participants for random pairing
+    // Shuffle available participants
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -93,35 +127,37 @@ router.post("/", async (req, res) => {
 
       if (participant_id1 !== participant_id2) {
         bracketPromises.push(
-          brackets.create({ 
-            division_id, 
-            participant_id1, 
+          brackets.create({
+            division_id,
+            participant_id1,
             participant_id2,
-            win_user1: false, // set false when creating
-            win_user2: false, // set false when creating
+            win_user1: false,
+            win_user2: false,
             user1,
-            user2
+            user2,
+            round: nextRound
           })
         );
       }
     }
 
-    // If one participant is left unpaired, pair them with 'Bi'
-    if (availableParticipants.length === 1) {
+    // Handle leftover participant (Bye)
+    if (availableParticipants.length === 1 && !biAlreadyUsed) {
       const participant1 = availableParticipants.pop();
       const participant_id1 = participant1.participant_id;
       const user1 = participant1.name;
       const user2 = "Bi";
 
       bracketPromises.push(
-        brackets.create({ 
-          division_id, 
-          participant_id1, 
-          participant_id2: -1, // Using -1 for 'Bi'
-          win_user1: false, // set false when creating
-          win_user2: false, // set false when creating
+        brackets.create({
+          division_id,
+          participant_id1,
+          participant_id2: -1,
+          win_user1: false,
+          win_user2: false,
           user1,
-          user2 
+          user2,
+          round: nextRound
         })
       );
     }
@@ -135,11 +171,12 @@ router.post("/", async (req, res) => {
   }
 });
 
+
   router.get("/", async (req, res) => {
     const { division_id } = req.query;
   
     // Log for debugging to see what division_id is being passed
-    console.log('division_id:', division_id);
+   
   
     // Check if division_id is provided
     if (!division_id) {
@@ -159,7 +196,6 @@ router.post("/", async (req, res) => {
         return res.json([]); // Return an empty array
       }
       // Return the found bracket
-      console.log(bracket);
       return res.json(bracket);
     } catch (error) {
       // Log the error for debugging
@@ -186,7 +222,7 @@ router.post("/", async (req, res) => {
     try {
         // Fetch the bracket by bracket_id
         let bracket = await brackets.findOne({ where: { bracket_id: bracket_id } });
-        console.log(bracket);
+     
         if (!bracket) {
             console.log("error");
             return res.status(404).send({ error: 'Bracket not found' });

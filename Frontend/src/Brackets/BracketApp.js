@@ -19,6 +19,7 @@ const TournamentBracket = () => {
     }
 
     try {
+      // Call backend to create brackets
       const response = await axios.post('http://localhost:3001/brackets', { division_id });
       console.log('Axios response:', response.data);
     } catch (error) {
@@ -27,6 +28,7 @@ const TournamentBracket = () => {
 
     console.log("Trying TO FETCH NOW!");
     try {
+      // Fetch the created brackets from the backend
       const response = await axios.get("http://localhost:3001/brackets", {
         params: { division_id },
       });
@@ -34,8 +36,10 @@ const TournamentBracket = () => {
       let fetchedBrackets = response.data;
       console.log('Fetched brackets:', fetchedBrackets);
 
+      // Sort the brackets by bracket_id
       fetchedBrackets = fetchedBrackets.sort((a, b) => a.bracket_id - b.bracket_id);
 
+      // Structure the brackets into rounds and include the next round
       const newBrackets = fetchedBrackets.map((bracket, idx) => ({
         bracket_id: bracket.bracket_id,
         user1: bracket.user1 || 'Bye',
@@ -43,7 +47,7 @@ const TournamentBracket = () => {
         score1: bracket.points_user1 || 0,
         score2: bracket.points_user2 || 0,
         winner: bracket.winner,
-        round: idx < 3 ? 1 : 2,
+        round: bracket.round, // Use the round from backend directly
       }));
 
       setBracketData(newBrackets);
@@ -71,41 +75,39 @@ const TournamentBracket = () => {
       </div>
 
       {Object.keys(rounds).length > 0 ? (
-  <div className="bracket-container">
-    {Object.keys(rounds).sort().map((roundNumber) => (
-      <div key={roundNumber} className="bracket-column">
-        <h5 className="text-center mb-2">Round {roundNumber}</h5>
-        {rounds[roundNumber].map((bracket, idx) => (
-          <div key={idx} style={{ minHeight: '130px' }}>
-            <div className="card shadow-sm bracket-card">
-              <div className="card-body p-2">
-                <div className={`py-2 ${bracket.winner === 'user1' ? 'bg-success text-white' : ''}`}>
-                  {bracket.user1} <span className="badge bg-light text-dark ms-1">{bracket.score1}</span>
+        <div className="bracket-container">
+          {Object.keys(rounds).sort().map((roundNumber) => (
+            <div key={roundNumber} className="bracket-column">
+              <h5 className="text-center mb-2">Round {roundNumber}</h5>
+              {rounds[roundNumber].map((bracket, idx) => (
+                <div key={idx} style={{ minHeight: '130px' }}>
+                  <div className="card shadow-sm bracket-card">
+                    <div className="card-body p-2">
+                      <div className={`py-2 ${bracket.winner === 'user1' ? 'bg-success text-white' : ''}`}>
+                        {bracket.user1} <span className="badge bg-light text-dark ms-1">{bracket.score1}</span>
+                      </div>
+                      <hr className="my-1" />
+                      <div className={`py-2 ${bracket.winner === 'user2' ? 'bg-success text-white' : ''}`}>
+                        {bracket.user2} <span className="badge bg-light text-dark ms-1">{bracket.score2}</span>
+                      </div>
+                      <button
+                        className="btn btn-success mt-2"
+                        onClick={() => navigate(`/PointTracker?bracket_id=${bracket.bracket_id}`)}
+                      >
+                        Select 🎯
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <hr className="my-1" />
-                <div className={`py-2 ${bracket.winner === 'user2' ? 'bg-success text-white' : ''}`}>
-                  {bracket.user2} <span className="badge bg-light text-dark ms-1">{bracket.score2}</span>
-                </div>
-                <button
-                  className="btn btn-success mt-2"
-                  onClick={() => navigate(`/PointTracker?bracket_id=${bracket.bracket_id}`)}
-                >
-                  Select 🎯
-                </button>
-              </div>
+              ))}
             </div>
-          </div>
-        ))}
-      </div>
-    ))}
-  </div>
-) : (
-  <div className="text-center">
-    <p>No brackets to display. Click 'Show Brackets' to fetch data.</p>
-  </div>
-)}
-
-
+          ))}
+        </div>
+      ) : (
+        <div className="text-center">
+          <p>No brackets to display. Click 'Show Brackets' to fetch data.</p>
+        </div>
+      )}
     </div>
   );
 };
